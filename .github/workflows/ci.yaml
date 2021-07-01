@@ -15,6 +15,7 @@ jobs:
           mkdir build
           elm make src/Main.elm --output=build/main.js
           cp index.html build/
+          cp assets/* build/
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
