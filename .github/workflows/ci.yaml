@@ -10,8 +10,6 @@ jobs:
         uses: jorelali/setup-elm@v3
         with:
           elm-version: 0.19.1
-      - name: Run tests ⚙️
-        run: elm-test
       - name: Build 🔧
         run: |
           mkdir build
