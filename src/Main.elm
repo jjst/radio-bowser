@@ -6,7 +6,9 @@ import Dict
 import Browser
 import Html exposing (Html, text, div)
 import Http
-import Json.Decode exposing (Decoder, list, field, map, map2, string)
+import Json.Decode exposing (Decoder, list, field, map, map2, nullable, string)
+import Maybe.Extra
+
 
 
 import Bootstrap.CDN as CDN
@@ -47,15 +49,26 @@ type alias StationDict = Dict StationId StationInfo
 init : () -> (Model, Cmd Msg)
 init _ =
   ( Loading
-  , Http.get
+  , getStationList
+  )
+
+getStationList : Cmd Msg
+getStationList =
+  Http.get
       { url = baseUrl ++ "/stations"
       , expect = Http.expectJson GotStationList stationListDecoder
       }
-  )
 
-nowPlayingDecoder : Decoder String
+getNowPlaying : StationId -> Cmd Msg
+getNowPlaying stationId =
+  Http.get
+      { url = baseUrl ++ "/stations/" ++ stationId ++ "/now-playing"
+      , expect = Http.expectJson (GotNowPlayingInfo stationId) nowPlayingDecoder
+      }
+
+nowPlayingDecoder : Decoder (Maybe String)
 nowPlayingDecoder =
-  field "title" string
+  field "title" (nullable string)
 
 stationListDecoder : Decoder StationDict
 stationListDecoder =
@@ -71,7 +84,7 @@ stationListItemDecoder =
 
 
 type Msg
-  = GotNowPlayingInfo (Result Http.Error String)
+  = GotNowPlayingInfo StationId (Result Http.Error (Maybe String))
   | GotStationList (Result Http.Error StationDict)
 
 
@@ -81,12 +94,29 @@ update msg model =
     GotStationList result ->
       case result of
         Ok stations ->
-          (Success stations, Cmd.none)
+          (Success stations, Dict.keys stations |> List.map getNowPlaying |> Cmd.batch)
 
         Err error ->
           Debug.log "error" error |> \_ -> (Failure, Cmd.none)
-    GotNowPlayingInfo _ ->
-      (model, Cmd.none)
+    GotNowPlayingInfo stationId result ->
+      let
+        cmd = Cmd.none
+        newModel =
+          case result of
+            Ok maybeTitle ->
+              case model of
+                Success stations ->
+                  let
+                      updatedStations = 
+                        stations |> Dict.update stationId (Maybe.map (\station -> { station | nowPlaying = maybeTitle }))
+                  in
+                      Success updatedStations
+                _ -> model
+
+            Err error ->
+              Debug.log "error" error |> \_ -> model
+      in
+        (newModel, cmd)
 
 
 
@@ -120,7 +150,7 @@ view model =
             ListGroup.li
               [ ListGroup.attrs [ Flex.block, Flex.justifyBetween, Flex.alignItemsCenter ] ]
               [ text station.name
-              , Badge.badgePrimary [] [ text "14" ]
+              , Badge.badgePrimary [] (List.map text (Maybe.Extra.toList station.nowPlaying))
               ]
           )
       in
