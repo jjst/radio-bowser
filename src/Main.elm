@@ -1,13 +1,15 @@
 module Main exposing (main)
 
 import Debug
+import Dict exposing (Dict)
+import Dict
 import Browser
 import Html exposing (Html, text, div)
 import Http
-import Json.Decode exposing (Decoder, field, string)
+import Json.Decode exposing (Decoder, list, field, map, map2, string)
 
 baseUrl : String 
-baseUrl = "https://now-playing-42nq5.ondigitalocean.app/api/stations/fr/radiomeuh/now-playing"
+baseUrl = "https://now-playing-42nq5.ondigitalocean.app/api"
 
 
 -- MAIN
@@ -29,15 +31,18 @@ main =
 type Model
   = Failure
   | Loading
-  | Success String
+  | Success (StationDict)
 
+type alias StationId = String
+type alias StationInfo = {name: String, nowPlaying: Maybe String}
+type alias StationDict = Dict StationId StationInfo
 
 init : () -> (Model, Cmd Msg)
 init _ =
   ( Loading
   , Http.get
-      { url = baseUrl
-      , expect = Http.expectJson GotNowPlayingInfo nowPlayingDecoder
+      { url = baseUrl ++ "/stations"
+      , expect = Http.expectJson GotStationList stationListDecoder
       }
   )
 
@@ -45,24 +50,37 @@ nowPlayingDecoder : Decoder String
 nowPlayingDecoder =
   field "title" string
 
+stationListDecoder : Decoder StationDict
+stationListDecoder =
+  field "items" (list stationListItemDecoder) |> map Dict.fromList
+
+stationListItemDecoder : Decoder (StationId, StationInfo)
+stationListItemDecoder =
+  map2 Tuple.pair
+    (field "id" string)
+    (field "name" (map (\n -> { name = n, nowPlaying = Nothing }) string))
 
 -- UPDATE
 
 
 type Msg
   = GotNowPlayingInfo (Result Http.Error String)
+  | GotStationList (Result Http.Error StationDict)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    GotNowPlayingInfo result ->
+    GotStationList result ->
       case result of
-        Ok fullText ->
-          (Success fullText, Cmd.none)
+        Ok stations ->
+          (Success stations, Cmd.none)
 
         Err error ->
           Debug.log "error" error |> \_ -> (Failure, Cmd.none)
+    GotNowPlayingInfo _ ->
+      (model, Cmd.none)
+
 
 
 
@@ -82,10 +100,16 @@ view : Model -> Html Msg
 view model =
   case model of
     Failure ->
-      text "I was unable to load your book."
+      text "I was unable to load radio stations."
 
     Loading ->
       text "Loading..."
 
-    Success fullText ->
-      div [] [ text fullText ]
+    Success stations ->
+      let
+        stationsDivs = stations 
+          |> Dict.values
+          |> List.map .name
+          |> List.map (\n -> div [] [ text n ])
+      in
+        div [] stationsDivs
