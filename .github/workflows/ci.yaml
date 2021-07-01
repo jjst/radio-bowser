@@ -7,7 +7,7 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
       - name: Setup Node.js environment ☕
-        uses: actions/setup-node@v1.4.2
+        uses: actions/setup-node@v2
       - name: Install elm 📥
         run: |
            npm install -g elm@0.19.1-3
