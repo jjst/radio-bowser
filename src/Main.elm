@@ -22,6 +22,8 @@ import Bootstrap.Badge as Badge
 baseUrl : String
 baseUrl = "https://now-playing-42nq5.ondigitalocean.app/api"
 
+stationRefreshRateSeconds : Float
+stationRefreshRateSeconds = 10
 
 -- MAIN
 
@@ -103,7 +105,7 @@ update msg model =
           Debug.log "error" error |> \_ -> (Failure, Cmd.none)
     GotNowPlayingInfo stationId result ->
       let
-        cmd = Process.sleep 5000 |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity
+        cmd = Process.sleep (stationRefreshRateSeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity
         newModel =
           case result of
             Ok maybeTitle ->
