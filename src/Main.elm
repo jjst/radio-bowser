@@ -8,6 +8,8 @@ import Html exposing (Html, text, div)
 import Http
 import Json.Decode exposing (Decoder, list, field, map, map2, nullable, string)
 import Maybe.Extra
+import Process
+import Task
 
 
 
@@ -86,6 +88,7 @@ stationListItemDecoder =
 type Msg
   = GotNowPlayingInfo StationId (Result Http.Error (Maybe String))
   | GotStationList (Result Http.Error StationDict)
+  | UpdateNowPlaying StationId
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -100,7 +103,7 @@ update msg model =
           Debug.log "error" error |> \_ -> (Failure, Cmd.none)
     GotNowPlayingInfo stationId result ->
       let
-        cmd = Cmd.none
+        cmd = Process.sleep 5000 |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity
         newModel =
           case result of
             Ok maybeTitle ->
@@ -117,6 +120,8 @@ update msg model =
               Debug.log "error" error |> \_ -> model
       in
         (newModel, cmd)
+    UpdateNowPlaying stationId ->
+      Debug.log "updating station" stationId |> \_ -> (model, getNowPlaying stationId)
 
 
 
