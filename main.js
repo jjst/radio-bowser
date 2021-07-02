@@ -7607,7 +7607,7 @@ var $elm$core$Dict$values = function (dict) {
 		_List_Nil,
 		dict);
 };
-var $rundis$elm_bootstrap$Bootstrap$Badge$Primary = {$: 'Primary'};
+var $rundis$elm_bootstrap$Bootstrap$Badge$Dark = {$: 'Dark'};
 var $rundis$elm_bootstrap$Bootstrap$Badge$Roled = function (a) {
 	return {$: 'Roled', a: a};
 };
@@ -7658,10 +7658,10 @@ var $rundis$elm_bootstrap$Bootstrap$Badge$badgeInternal = F3(
 				attributes),
 			children);
 	});
-var $rundis$elm_bootstrap$Bootstrap$Badge$badgePrimary = $rundis$elm_bootstrap$Bootstrap$Badge$badgeInternal(
+var $rundis$elm_bootstrap$Bootstrap$Badge$badgeDark = $rundis$elm_bootstrap$Bootstrap$Badge$badgeInternal(
 	_List_fromArray(
 		[
-			$rundis$elm_bootstrap$Bootstrap$Badge$Roled($rundis$elm_bootstrap$Bootstrap$Badge$Primary)
+			$rundis$elm_bootstrap$Bootstrap$Badge$Roled($rundis$elm_bootstrap$Bootstrap$Badge$Dark)
 		]));
 var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 	var icon = function () {
@@ -7676,7 +7676,7 @@ var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 		}
 	}();
 	return A2(
-		$rundis$elm_bootstrap$Bootstrap$Badge$badgePrimary,
+		$rundis$elm_bootstrap$Bootstrap$Badge$badgeDark,
 		_List_Nil,
 		_List_fromArray(
 			[
