@@ -47,7 +47,8 @@ type Model
   | Success (StationDict)
 
 type alias StationId = String
-type alias StationInfo = {name: String, nowPlaying: Maybe String}
+type alias StationInfo = {name: String, nowPlaying: Maybe NowPlayingInfo}
+type alias NowPlayingInfo = {title: String, itemType: String}
 type alias StationDict = Dict StationId StationInfo
 
 init : () -> (Model, Cmd Msg)
@@ -70,9 +71,11 @@ getNowPlaying stationId =
       , expect = Http.expectJson (GotNowPlayingInfo stationId) nowPlayingDecoder
       }
 
-nowPlayingDecoder : Decoder (Maybe String)
+nowPlayingDecoder : Decoder (Maybe NowPlayingInfo)
 nowPlayingDecoder =
-  field "title" (nullable string)
+  map2 (Maybe.map2 NowPlayingInfo)
+    (field "title" (nullable string))
+    (field "type" (nullable string))
 
 stationListDecoder : Decoder StationDict
 stationListDecoder =
@@ -88,7 +91,7 @@ stationListItemDecoder =
 
 
 type Msg
-  = GotNowPlayingInfo StationId (Result Http.Error (Maybe String))
+  = GotNowPlayingInfo StationId (Result Http.Error (Maybe NowPlayingInfo))
   | GotStationList (Result Http.Error StationDict)
   | UpdateNowPlaying StationId
 
@@ -156,9 +159,7 @@ view model =
           |> List.map (\station ->
             ListGroup.li
               [ ListGroup.attrs [ Flex.block, Flex.justifyBetween, Flex.alignItemsCenter ] ]
-              [ text station.name
-              , Badge.badgePrimary [] (List.map text (Maybe.Extra.toList station.nowPlaying))
-              ]
+              ([ text station.name ] ++ Maybe.Extra.toList (Maybe.map viewNowPlayingInfo station.nowPlaying))
           )
       in
         -- div [] stationsDivs
@@ -168,3 +169,13 @@ view model =
                 [ Grid.col [] [ ListGroup.ul stationsDivs ] ]
 
             ]
+
+viewNowPlayingInfo : NowPlayingInfo -> Html Msg
+viewNowPlayingInfo nowPlayingInfo =
+  let
+      icon = case nowPlayingInfo.itemType of
+        "song" -> "🎵"
+        "programme" -> "🎤"
+        _ -> ""
+  in
+  Badge.badgePrimary [] [text (icon ++ " " ++ nowPlayingInfo.title)]
