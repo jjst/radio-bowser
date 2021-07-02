@@ -1,6 +1,5 @@
 module Main exposing (main)
 
-import Debug
 import Dict exposing (Dict)
 import Dict
 import Browser
@@ -110,7 +109,7 @@ update msg model =
           (Success stations, Dict.keys stations |> List.map getNowPlaying |> Cmd.batch)
 
         Err error ->
-          Debug.log "error" error |> \_ -> (Failure, Cmd.none)
+          (Failure, Cmd.none)
     GotNowPlayingInfo stationId result ->
       let
         newModel =
@@ -126,7 +125,7 @@ update msg model =
                 _ -> model
 
             Err error ->
-              Debug.log "error" error |> \_ -> model
+              model
         isProgramme = case result of
             Ok (Just {itemType}) -> itemType == "programme"
             _ -> False
@@ -141,10 +140,9 @@ update msg model =
       in
         (newModel, cmd)
     ScheduleNowPlayingUpdate stationId delaySeconds ->
-        Debug.log "Scheduling next update " (stationId, delaySeconds) 
-          |> \_ -> (model, Process.sleep (delaySeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity)
+          (model, Process.sleep (delaySeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity)
     UpdateNowPlaying stationId ->
-      Debug.log "updating station" stationId |> \_ -> (model, getNowPlaying stationId)
+      (model, getNowPlaying stationId)
 
 
 
