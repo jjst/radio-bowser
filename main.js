@@ -6238,7 +6238,6 @@ var $elm$core$Maybe$map = F2(
 	});
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$core$Process$sleep = _Process_sleep;
-var $author$project$Main$stationRefreshRateSeconds = 10;
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6290,6 +6289,7 @@ var $author$project$Main$update = F2(
 							A2($elm$core$Debug$log, 'error', error));
 					}
 				}();
+				var nextUpdateDelaySeconds = _Utils_eq(newModel, model) ? 20 : 120;
 				var cmd = A2(
 					$elm$core$Task$perform,
 					$elm$core$Basics$identity,
@@ -6299,7 +6299,7 @@ var $author$project$Main$update = F2(
 							return $elm$core$Task$succeed(
 								$author$project$Main$UpdateNowPlaying(stationId));
 						},
-						$elm$core$Process$sleep($author$project$Main$stationRefreshRateSeconds * 1000)));
+						$elm$core$Process$sleep(nextUpdateDelaySeconds * 1000)));
 				return _Utils_Tuple2(newModel, cmd);
 			default:
 				var stationId = msg.a;
