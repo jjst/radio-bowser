@@ -108,7 +108,6 @@ update msg model =
           Debug.log "error" error |> \_ -> (Failure, Cmd.none)
     GotNowPlayingInfo stationId result ->
       let
-        cmd = Process.sleep (stationRefreshRateSeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity
         newModel =
           case result of
             Ok maybeTitle ->
@@ -123,6 +122,8 @@ update msg model =
 
             Err error ->
               Debug.log "error" error |> \_ -> model
+        nextUpdateDelaySeconds = if newModel == model then 20 else 120
+        cmd = Process.sleep (nextUpdateDelaySeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity
       in
         (newModel, cmd)
     UpdateNowPlaying stationId ->
