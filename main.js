@@ -6175,6 +6175,25 @@ var $author$project$Main$GotNowPlayingInfo = F2(
 	function (a, b) {
 		return {$: 'GotNowPlayingInfo', a: a, b: b};
 	});
+var $author$project$Main$NowPlayingInfo = F2(
+	function (title, itemType) {
+		return {itemType: itemType, title: title};
+	});
+var $elm$core$Maybe$map2 = F3(
+	function (func, ma, mb) {
+		if (ma.$ === 'Nothing') {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var a = ma.a;
+			if (mb.$ === 'Nothing') {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var b = mb.a;
+				return $elm$core$Maybe$Just(
+					A2(func, a, b));
+			}
+		}
+	});
 var $elm$json$Json$Decode$null = _Json_decodeNull;
 var $elm$json$Json$Decode$oneOf = _Json_oneOf;
 var $elm$json$Json$Decode$nullable = function (decoder) {
@@ -6185,10 +6204,17 @@ var $elm$json$Json$Decode$nullable = function (decoder) {
 				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, decoder)
 			]));
 };
-var $author$project$Main$nowPlayingDecoder = A2(
-	$elm$json$Json$Decode$field,
-	'title',
-	$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string));
+var $author$project$Main$nowPlayingDecoder = A3(
+	$elm$json$Json$Decode$map2,
+	$elm$core$Maybe$map2($author$project$Main$NowPlayingInfo),
+	A2(
+		$elm$json$Json$Decode$field,
+		'title',
+		$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string)),
+	A2(
+		$elm$json$Json$Decode$field,
+		'type',
+		$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string)));
 var $author$project$Main$getNowPlaying = function (stationId) {
 	return $elm$http$Http$get(
 		{
@@ -6301,62 +6327,6 @@ var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Attrs = function (a) {
 var $rundis$elm_bootstrap$Bootstrap$ListGroup$attrs = function (attrs_) {
 	return $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Attrs(attrs_);
 };
-var $rundis$elm_bootstrap$Bootstrap$Badge$Primary = {$: 'Primary'};
-var $rundis$elm_bootstrap$Bootstrap$Badge$Roled = function (a) {
-	return {$: 'Roled', a: a};
-};
-var $rundis$elm_bootstrap$Bootstrap$Badge$roleOption = function (role) {
-	switch (role.$) {
-		case 'Primary':
-			return 'badge-primary';
-		case 'Secondary':
-			return 'badge-secondary';
-		case 'Success':
-			return 'badge-success';
-		case 'Info':
-			return 'badge-info';
-		case 'Warning':
-			return 'badge-warning';
-		case 'Danger':
-			return 'badge-danger';
-		case 'Light':
-			return 'badge-light';
-		default:
-			return 'badge-dark';
-	}
-};
-var $rundis$elm_bootstrap$Bootstrap$Badge$badgeClass = function (option) {
-	return $elm$html$Html$Attributes$class(
-		function () {
-			if (option.$ === 'Pill') {
-				return 'badge-pill';
-			} else {
-				var role = option.a;
-				return $rundis$elm_bootstrap$Bootstrap$Badge$roleOption(role);
-			}
-		}());
-};
-var $rundis$elm_bootstrap$Bootstrap$Badge$badgeAttributes = function (options) {
-	return A2(
-		$elm$core$List$cons,
-		$elm$html$Html$Attributes$class('badge'),
-		A2($elm$core$List$map, $rundis$elm_bootstrap$Bootstrap$Badge$badgeClass, options));
-};
-var $elm$html$Html$span = _VirtualDom_node('span');
-var $rundis$elm_bootstrap$Bootstrap$Badge$badgeInternal = F3(
-	function (options, attributes, children) {
-		return A2(
-			$elm$html$Html$span,
-			_Utils_ap(
-				$rundis$elm_bootstrap$Bootstrap$Badge$badgeAttributes(options),
-				attributes),
-			children);
-	});
-var $rundis$elm_bootstrap$Bootstrap$Badge$badgePrimary = $rundis$elm_bootstrap$Bootstrap$Badge$badgeInternal(
-	_List_fromArray(
-		[
-			$rundis$elm_bootstrap$Bootstrap$Badge$Roled($rundis$elm_bootstrap$Bootstrap$Badge$Primary)
-		]));
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$block = $elm$html$Html$Attributes$class('d-flex');
 var $rundis$elm_bootstrap$Bootstrap$Grid$Column = function (a) {
 	return {$: 'Column', a: a};
@@ -7388,6 +7358,82 @@ var $elm$core$Dict$values = function (dict) {
 		_List_Nil,
 		dict);
 };
+var $rundis$elm_bootstrap$Bootstrap$Badge$Primary = {$: 'Primary'};
+var $rundis$elm_bootstrap$Bootstrap$Badge$Roled = function (a) {
+	return {$: 'Roled', a: a};
+};
+var $rundis$elm_bootstrap$Bootstrap$Badge$roleOption = function (role) {
+	switch (role.$) {
+		case 'Primary':
+			return 'badge-primary';
+		case 'Secondary':
+			return 'badge-secondary';
+		case 'Success':
+			return 'badge-success';
+		case 'Info':
+			return 'badge-info';
+		case 'Warning':
+			return 'badge-warning';
+		case 'Danger':
+			return 'badge-danger';
+		case 'Light':
+			return 'badge-light';
+		default:
+			return 'badge-dark';
+	}
+};
+var $rundis$elm_bootstrap$Bootstrap$Badge$badgeClass = function (option) {
+	return $elm$html$Html$Attributes$class(
+		function () {
+			if (option.$ === 'Pill') {
+				return 'badge-pill';
+			} else {
+				var role = option.a;
+				return $rundis$elm_bootstrap$Bootstrap$Badge$roleOption(role);
+			}
+		}());
+};
+var $rundis$elm_bootstrap$Bootstrap$Badge$badgeAttributes = function (options) {
+	return A2(
+		$elm$core$List$cons,
+		$elm$html$Html$Attributes$class('badge'),
+		A2($elm$core$List$map, $rundis$elm_bootstrap$Bootstrap$Badge$badgeClass, options));
+};
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $rundis$elm_bootstrap$Bootstrap$Badge$badgeInternal = F3(
+	function (options, attributes, children) {
+		return A2(
+			$elm$html$Html$span,
+			_Utils_ap(
+				$rundis$elm_bootstrap$Bootstrap$Badge$badgeAttributes(options),
+				attributes),
+			children);
+	});
+var $rundis$elm_bootstrap$Bootstrap$Badge$badgePrimary = $rundis$elm_bootstrap$Bootstrap$Badge$badgeInternal(
+	_List_fromArray(
+		[
+			$rundis$elm_bootstrap$Bootstrap$Badge$Roled($rundis$elm_bootstrap$Bootstrap$Badge$Primary)
+		]));
+var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
+	var icon = function () {
+		var _v0 = nowPlayingInfo.itemType;
+		switch (_v0) {
+			case 'song':
+				return '🎵';
+			case 'programme':
+				return '🎤';
+			default:
+				return '';
+		}
+	}();
+	return A2(
+		$rundis$elm_bootstrap$Bootstrap$Badge$badgePrimary,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$text(icon + (' ' + nowPlayingInfo.title))
+			]));
+};
 var $author$project$Main$view = function (model) {
 	switch (model.$) {
 		case 'Failure':
@@ -7407,17 +7453,13 @@ var $author$project$Main$view = function (model) {
 								_List_fromArray(
 									[$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$block, $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$justifyBetween, $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$alignItemsCenter]))
 							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text(station.name),
-								A2(
-								$rundis$elm_bootstrap$Bootstrap$Badge$badgePrimary,
-								_List_Nil,
-								A2(
-									$elm$core$List$map,
-									$elm$html$Html$text,
-									$elm_community$maybe_extra$Maybe$Extra$toList(station.nowPlaying)))
-							]));
+						_Utils_ap(
+							_List_fromArray(
+								[
+									$elm$html$Html$text(station.name)
+								]),
+							$elm_community$maybe_extra$Maybe$Extra$toList(
+								A2($elm$core$Maybe$map, $author$project$Main$viewNowPlayingInfo, station.nowPlaying))));
 				},
 				$elm$core$Dict$values(stations));
 			return A2(
