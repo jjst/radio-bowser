@@ -13,7 +13,7 @@ jobs:
       - name: Build 🔧
         run: |
           mkdir build
-          elm make src/Main.elm --output=build/main.js
+          elm make --optimize src/Main.elm --output=build/main.js
           cp index.html build/
           cp assets/* build/
       - name: Deploy 🚀
