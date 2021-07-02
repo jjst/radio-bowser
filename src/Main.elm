@@ -196,4 +196,4 @@ viewNowPlayingInfo nowPlayingInfo =
         "programme" -> "🎤"
         _ -> ""
   in
-  Badge.badgePrimary [] [text (icon ++ " " ++ nowPlayingInfo.title)]
+  Badge.badgeDark [] [text (icon ++ " " ++ nowPlayingInfo.title)]
