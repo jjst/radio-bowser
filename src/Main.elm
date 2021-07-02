@@ -9,6 +9,7 @@ import Http
 import Json.Decode exposing (Decoder, list, field, map, map2, nullable, string)
 import Maybe.Extra
 import Process
+import Random
 import Task
 
 
@@ -24,6 +25,9 @@ baseUrl = "https://now-playing-42nq5.ondigitalocean.app/api"
 
 stationRefreshRateSeconds : Float
 stationRefreshRateSeconds = 10
+
+jitterSeconds : Float
+jitterSeconds = 4
 
 -- MAIN
 
@@ -93,6 +97,7 @@ stationListItemDecoder =
 type Msg
   = GotNowPlayingInfo StationId (Result Http.Error (Maybe NowPlayingInfo))
   | GotStationList (Result Http.Error StationDict)
+  | ScheduleNowPlayingUpdate StationId Float
   | UpdateNowPlaying StationId
 
 
@@ -122,10 +127,22 @@ update msg model =
 
             Err error ->
               Debug.log "error" error |> \_ -> model
-        nextUpdateDelaySeconds = if newModel == model then 20 else 120
-        cmd = Process.sleep (nextUpdateDelaySeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity
+        isProgramme = case result of
+            Ok (Just {itemType}) -> itemType == "programme"
+            _ -> False
+        nextUpdateDelaySeconds = 
+          if isProgramme then
+            120
+          else if newModel /= model then 
+            120 
+          else 
+            20
+        cmd = Random.generate (ScheduleNowPlayingUpdate stationId) (Random.float (nextUpdateDelaySeconds - jitterSeconds) (nextUpdateDelaySeconds + jitterSeconds)) 
       in
         (newModel, cmd)
+    ScheduleNowPlayingUpdate stationId delaySeconds ->
+        Debug.log "Scheduling next update " (stationId, delaySeconds) 
+          |> \_ -> (model, Process.sleep (delaySeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity)
     UpdateNowPlaying stationId ->
       Debug.log "updating station" stationId |> \_ -> (model, getNowPlaying stationId)
 
