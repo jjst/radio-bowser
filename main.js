@@ -7820,13 +7820,15 @@ var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100 = $elm$html$Html$Attributes$class('w-100');
 var $author$project$Main$viewStation = F2(
 	function (currentTime, station) {
+		var effectiveTime = $elm$time$Time$millisToPosix(
+			1000 + $elm$time$Time$posixToMillis(currentTime));
 		var timeTxt = function () {
 			var _v0 = station.b5;
 			if (!_v0.$) {
 				return 'loading...';
 			} else {
 				var time = _v0.a;
-				return A2($ryannhg$date_format$DateFormat$Relative$relativeTime, currentTime, time);
+				return A2($ryannhg$date_format$DateFormat$Relative$relativeTime, effectiveTime, time);
 			}
 		}();
 		return A2(
