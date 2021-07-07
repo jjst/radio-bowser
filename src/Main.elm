@@ -3,9 +3,10 @@ module Main exposing (main)
 import Dict exposing (Dict)
 import Dict
 import Browser
-import Html exposing (Html, text, div)
+import Html exposing (Html, text, div, small, p, h5)
+import Html.Attributes exposing (href)
 import Http
-import Json.Decode exposing (Decoder, list, field, map, map2, nullable, string)
+import Json.Decode exposing (Decoder, list, field, map, map2, map3, nullable, string, succeed)
 import Maybe.Extra
 import Process
 import Random
@@ -17,6 +18,8 @@ import Bootstrap.CDN as CDN
 import Bootstrap.Grid as Grid
 import Bootstrap.ListGroup as ListGroup
 import Bootstrap.Utilities.Flex as Flex
+import Bootstrap.Utilities.Size as Size
+import Bootstrap.Utilities.Spacing as Spacing
 import Bootstrap.Badge as Badge
 
 baseUrl : String
@@ -50,7 +53,7 @@ type Model
   | Success (StationDict)
 
 type alias StationId = String
-type alias StationInfo = {name: String, nowPlaying: Maybe NowPlayingInfo}
+type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe NowPlayingInfo}
 type alias NowPlayingInfo = {title: String, itemType: String}
 type alias StationDict = Dict StationId StationInfo
 
@@ -88,7 +91,15 @@ stationListItemDecoder : Decoder (StationId, StationInfo)
 stationListItemDecoder =
   map2 Tuple.pair
     (field "id" string)
-    (field "name" (map (\n -> { name = n, nowPlaying = Nothing }) string))
+    stationInfoDecoder
+
+stationInfoDecoder : Decoder StationInfo
+stationInfoDecoder =
+  map3 StationInfo
+    (field "name" string)
+    (field "favicon" (nullable string))
+    (succeed Nothing)
+
 
 -- UPDATE
 
@@ -170,21 +181,27 @@ view model =
 
     Success stations ->
       let
-        stationsDivs = stations
+        items = stations
           |> Dict.values
-          |> List.map (\station ->
-            ListGroup.li
-              [ ListGroup.attrs [ Flex.block, Flex.justifyBetween, Flex.alignItemsCenter ] ]
-              ([ text station.name ] ++ Maybe.Extra.toList (Maybe.map viewNowPlayingInfo station.nowPlaying))
-          )
+          |> List.map viewStation
       in
-        -- div [] stationsDivs
         Grid.container []
             [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
             , Grid.row []
-                [ Grid.col [] [ ListGroup.ul stationsDivs ] ]
+                [ Grid.col [] [ ListGroup.custom items ] ]
 
             ]
+
+viewStation : StationInfo -> ListGroup.CustomItem Msg
+viewStation station =
+  ListGroup.anchor
+      [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart ] ]
+      [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
+          [ h5 [ Spacing.mb1 ] [ text station.name ]
+          , small [] [ text "3 days ago" ]
+          ]
+      , p [ Spacing.mb1 ] (Maybe.Extra.toList (Maybe.map viewNowPlayingInfo station.nowPlaying))
+      ]
 
 viewNowPlayingInfo : NowPlayingInfo -> Html Msg
 viewNowPlayingInfo nowPlayingInfo =
@@ -194,4 +211,4 @@ viewNowPlayingInfo nowPlayingInfo =
         "programme" -> "🎤"
         _ -> ""
   in
-  Badge.badgeDark [] [text (icon ++ " " ++ nowPlayingInfo.title)]
+  text (icon ++ " " ++ nowPlayingInfo.title)
