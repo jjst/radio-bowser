@@ -61,7 +61,7 @@ type Stations
 
 type alias StationId = String
 type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe NowPlayingInfo, loadingState: LoadingState}
-type LoadingState 
+type LoadingState
   = CurrentlyLoading
   | LoadedAt Time.Posix
 type alias NowPlayingInfo = {title: String, itemType: String}
@@ -140,7 +140,7 @@ update msg model =
               case model.stations of
                 Success stations ->
                   let
-                      updatedStations = 
+                      updatedStations =
                         stations |> Dict.update stationId (Maybe.map (\station -> { station | nowPlaying = np, loadingState = (LoadedAt time) }))
                   in
                       Success updatedStations
@@ -151,14 +151,14 @@ update msg model =
         isProgramme = case result of
             Ok (Just {itemType}) -> itemType == "programme"
             _ -> False
-        nextUpdateDelaySeconds = 
+        nextUpdateDelaySeconds =
           if isProgramme then
             120
-          else if newStations /= model.stations then 
-            120 
-          else 
+          else if newStations /= model.stations then
+            120
+          else
             20
-        cmd = Random.generate (ScheduleNowPlayingUpdate stationId) (Random.float (nextUpdateDelaySeconds - jitterSeconds) (nextUpdateDelaySeconds + jitterSeconds)) 
+        cmd = Random.generate (ScheduleNowPlayingUpdate stationId) (Random.float (nextUpdateDelaySeconds - jitterSeconds) (nextUpdateDelaySeconds + jitterSeconds))
       in
         ({ model | stations = newStations }, cmd)
     ScheduleNowPlayingUpdate stationId delaySeconds ->
@@ -209,16 +209,22 @@ view {stations, time} =
 viewStation : Time.Posix -> StationInfo -> ListGroup.CustomItem Msg
 viewStation currentTime station =
   let
-      timeTxt = 
+      -- Pretend we're a tiny bit into the future, just so `relativetime` displays times uniformly.
+      effectiveTime =
+        currentTime
+          |> Time.posixToMillis
+          |> (+) 1000
+          |> Time.millisToPosix
+      timeTxt =
         case station.loadingState of
           CurrentlyLoading -> "loading..."
-          LoadedAt time -> relativeTime currentTime time
+          LoadedAt time -> relativeTime effectiveTime time
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart ] ]
       [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
-          [ h5 [ Spacing.m1 ] 
-              [ text station.name 
+          [ h5 [ Spacing.m1 ]
+              [ text station.name
               ]
           , small [ Spacing.m1, class "ml-auto" ] [ text timeTxt ]
           ]
