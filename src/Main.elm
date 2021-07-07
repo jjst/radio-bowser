@@ -19,6 +19,7 @@ import Time
 import Bootstrap.CDN as CDN
 import Bootstrap.Grid as Grid
 import Bootstrap.ListGroup as ListGroup
+import Bootstrap.Spinner as Spinner
 import Bootstrap.Utilities.Flex as Flex
 import Bootstrap.Utilities.Size as Size
 import Bootstrap.Utilities.Spacing as Spacing
@@ -215,10 +216,10 @@ viewStation currentTime station =
           |> Time.posixToMillis
           |> (+) 1000
           |> Time.millisToPosix
-      timeTxt =
+      loadedWhenInfo =
         case station.loadingState of
-          CurrentlyLoading -> "loading..."
-          LoadedAt time -> relativeTime effectiveTime time
+          CurrentlyLoading -> Spinner.spinner [ Spinner.small ] []
+          LoadedAt time -> text (relativeTime effectiveTime time)
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart ] ]
@@ -226,7 +227,7 @@ viewStation currentTime station =
           [ h5 [ Spacing.m1 ]
               [ text station.name
               ]
-          , small [ Spacing.m1, class "ml-auto" ] [ text timeTxt ]
+          , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
           ]
       , p [ Spacing.mb1 ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
       ]
