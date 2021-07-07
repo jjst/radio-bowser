@@ -1,16 +1,18 @@
 module Main exposing (main)
 
+import DateFormat.Relative exposing (relativeTime)
 import Dict exposing (Dict)
 import Dict
 import Browser
-import Html exposing (Html, text, div, small, p, h5)
-import Html.Attributes exposing (href)
+import Html exposing (Html, img, text, div, small, p, h5)
+import Html.Attributes exposing (href, class, src, style)
 import Http
-import Json.Decode exposing (Decoder, list, field, map, map2, map3, nullable, string, succeed)
+import Json.Decode exposing (Decoder, list, field, map, map2, map3, map4, nullable, string, succeed)
 import Maybe.Extra
 import Process
 import Random
 import Task
+import Time
 
 
 
@@ -47,19 +49,27 @@ main =
 -- MODEL
 
 
-type Model
+type alias Model =
+  { stations : Stations
+  , time : Time.Posix
+  }
+
+type Stations
   = Failure
   | Loading
   | Success (StationDict)
 
 type alias StationId = String
-type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe NowPlayingInfo}
+type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe NowPlayingInfo, loadingState: LoadingState}
+type LoadingState 
+  = CurrentlyLoading
+  | LoadedAt Time.Posix
 type alias NowPlayingInfo = {title: String, itemType: String}
 type alias StationDict = Dict StationId StationInfo
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  ( Loading
+  ( Model Loading (Time.millisToPosix 0)
   , getStationList
   )
 
@@ -70,11 +80,11 @@ getStationList =
       , expect = Http.expectJson GotStationList stationListDecoder
       }
 
-getNowPlaying : StationId -> Cmd Msg
-getNowPlaying stationId =
+getNowPlaying : StationId -> Time.Posix -> Cmd Msg
+getNowPlaying stationId time =
   Http.get
       { url = baseUrl ++ "/stations/" ++ stationId ++ "/now-playing"
-      , expect = Http.expectJson (GotNowPlayingInfo stationId) nowPlayingDecoder
+      , expect = Http.expectJson (GotNowPlayingInfo stationId time) nowPlayingDecoder
       }
 
 nowPlayingDecoder : Decoder (Maybe NowPlayingInfo)
@@ -95,20 +105,21 @@ stationListItemDecoder =
 
 stationInfoDecoder : Decoder StationInfo
 stationInfoDecoder =
-  map3 StationInfo
+  map4 StationInfo
     (field "name" string)
     (field "favicon" (nullable string))
     (succeed Nothing)
+    (succeed CurrentlyLoading)
 
 
 -- UPDATE
 
 
 type Msg
-  = GotNowPlayingInfo StationId (Result Http.Error (Maybe NowPlayingInfo))
+  = GotNowPlayingInfo StationId Time.Posix (Result Http.Error (Maybe NowPlayingInfo))
   | GotStationList (Result Http.Error StationDict)
   | ScheduleNowPlayingUpdate StationId Float
-  | UpdateNowPlaying StationId
+  | UpdateNowPlaying StationId Time.Posix
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -117,45 +128,48 @@ update msg model =
     GotStationList result ->
       case result of
         Ok stations ->
-          (Success stations, Dict.keys stations |> List.map getNowPlaying |> Cmd.batch)
+          ({model | stations = Success stations }, Dict.keys stations |> List.map (scheduleNowPlayingUpdateIn 0) |> Cmd.batch)
 
         Err error ->
-          (Failure, Cmd.none)
-    GotNowPlayingInfo stationId result ->
+          ({ model | stations = Failure }, Cmd.none)
+    GotNowPlayingInfo stationId time result ->
       let
-        newModel =
+        newStations =
           case result of
-            Ok maybeTitle ->
-              case model of
+            Ok np ->
+              case model.stations of
                 Success stations ->
                   let
                       updatedStations = 
-                        stations |> Dict.update stationId (Maybe.map (\station -> { station | nowPlaying = maybeTitle }))
+                        stations |> Dict.update stationId (Maybe.map (\station -> { station | nowPlaying = np, loadingState = (LoadedAt time) }))
                   in
                       Success updatedStations
-                _ -> model
+                _ -> model.stations
 
             Err error ->
-              model
+              model.stations
         isProgramme = case result of
             Ok (Just {itemType}) -> itemType == "programme"
             _ -> False
         nextUpdateDelaySeconds = 
           if isProgramme then
             120
-          else if newModel /= model then 
+          else if newStations /= model.stations then 
             120 
           else 
             20
         cmd = Random.generate (ScheduleNowPlayingUpdate stationId) (Random.float (nextUpdateDelaySeconds - jitterSeconds) (nextUpdateDelaySeconds + jitterSeconds)) 
       in
-        (newModel, cmd)
+        ({ model | stations = newStations }, cmd)
     ScheduleNowPlayingUpdate stationId delaySeconds ->
-          (model, Process.sleep (delaySeconds * 1000) |> Task.andThen (\_ -> Task.succeed (UpdateNowPlaying stationId)) |> Task.perform identity)
-    UpdateNowPlaying stationId ->
-      (model, getNowPlaying stationId)
+          (model, scheduleNowPlayingUpdateIn delaySeconds stationId)
+    UpdateNowPlaying stationId time ->
+      ({ model | time = time }, getNowPlaying stationId time)
 
 
+scheduleNowPlayingUpdateIn : Float -> StationId -> Cmd Msg
+scheduleNowPlayingUpdateIn delaySeconds stationId=
+  Process.sleep (delaySeconds * 1000) |> Task.andThen (\_ -> Time.now) |> Task.perform (UpdateNowPlaying stationId)
 
 
 -- SUBSCRIPTIONS
@@ -171,19 +185,19 @@ subscriptions model =
 
 
 view : Model -> Html Msg
-view model =
-  case model of
+view {stations, time} =
+  case stations of
     Failure ->
       text "I was unable to load radio stations."
 
     Loading ->
       text "Loading..."
 
-    Success stations ->
+    Success s ->
       let
-        items = stations
+        items = s
           |> Dict.values
-          |> List.map viewStation
+          |> List.map (viewStation time)
       in
         Grid.container []
             [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
@@ -192,18 +206,26 @@ view model =
 
             ]
 
-viewStation : StationInfo -> ListGroup.CustomItem Msg
-viewStation station =
+viewStation : Time.Posix -> StationInfo -> ListGroup.CustomItem Msg
+viewStation currentTime station =
+  let
+      timeTxt = 
+        case station.loadingState of
+          CurrentlyLoading -> "loading..."
+          LoadedAt time -> relativeTime currentTime time
+  in
   ListGroup.anchor
       [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart ] ]
       [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
-          [ h5 [ Spacing.mb1 ] [ text station.name ]
-          , small [] [ text "3 days ago" ]
+          [ h5 [ Spacing.m1 ] 
+              [ text station.name 
+              ]
+          , small [ Spacing.m1, class "ml-auto" ] [ text timeTxt ]
           ]
-      , p [ Spacing.mb1 ] (Maybe.Extra.toList (Maybe.map viewNowPlayingInfo station.nowPlaying))
+      , p [ Spacing.mb1 ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
       ]
 
-viewNowPlayingInfo : NowPlayingInfo -> Html Msg
+viewNowPlayingInfo : NowPlayingInfo -> String
 viewNowPlayingInfo nowPlayingInfo =
   let
       icon = case nowPlayingInfo.itemType of
@@ -211,4 +233,4 @@ viewNowPlayingInfo nowPlayingInfo =
         "programme" -> "🎤"
         _ -> ""
   in
-  text (icon ++ " " ++ nowPlayingInfo.title)
+  icon ++ " " ++ nowPlayingInfo.title
