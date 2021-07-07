@@ -7998,38 +7998,39 @@ var $author$project$Main$viewStation = F2(
 var $author$project$Main$view = function (_v0) {
 	var stations = _v0.s;
 	var time = _v0.cu;
-	switch (stations.$) {
-		case 0:
-			return $elm$html$Html$text('I was unable to load radio stations.');
-		case 1:
-			return $elm$html$Html$text('Loading...');
-		default:
-			var s = stations.a;
-			var items = A2(
-				$elm$core$List$map,
-				$author$project$Main$viewStation(time),
-				$elm$core$Dict$values(s));
-			return A2(
-				$rundis$elm_bootstrap$Bootstrap$Grid$container,
+	var mainView = function () {
+		switch (stations.$) {
+			case 0:
+				return $elm$html$Html$text('I was unable to load radio stations.');
+			case 1:
+				return $elm$html$Html$text('');
+			default:
+				var s = stations.a;
+				return $rundis$elm_bootstrap$Bootstrap$ListGroup$custom(
+					A2(
+						$elm$core$List$map,
+						$author$project$Main$viewStation(time),
+						$elm$core$Dict$values(s)));
+		}
+	}();
+	return A2(
+		$rundis$elm_bootstrap$Bootstrap$Grid$container,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$rundis$elm_bootstrap$Bootstrap$CDN$stylesheet,
+				A2(
+				$rundis$elm_bootstrap$Bootstrap$Grid$row,
 				_List_Nil,
 				_List_fromArray(
 					[
-						$rundis$elm_bootstrap$Bootstrap$CDN$stylesheet,
 						A2(
-						$rundis$elm_bootstrap$Bootstrap$Grid$row,
+						$rundis$elm_bootstrap$Bootstrap$Grid$col,
 						_List_Nil,
 						_List_fromArray(
-							[
-								A2(
-								$rundis$elm_bootstrap$Bootstrap$Grid$col,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$rundis$elm_bootstrap$Bootstrap$ListGroup$custom(items)
-									]))
-							]))
-					]));
-	}
+							[mainView]))
+					]))
+			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{dP: $author$project$Main$init, d$: $author$project$Main$subscriptions, d6: $author$project$Main$update, d7: $author$project$Main$view});
