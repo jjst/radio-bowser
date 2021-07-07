@@ -7793,7 +7793,117 @@ var $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions = F3(
 			(differenceInMilliseconds < 0) ? A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.cn, options.cl, options.ck, options.cj, options.cm, options.co) : A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.b1, options.b$, options.b_, options.bZ, options.b0, options.b2));
 	});
 var $ryannhg$date_format$DateFormat$Relative$relativeTime = $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions($ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions);
+var $rundis$elm_bootstrap$Bootstrap$Spinner$Size = function (a) {
+	return {$: 1, a: a};
+};
+var $rundis$elm_bootstrap$Bootstrap$Spinner$Small = 1;
+var $rundis$elm_bootstrap$Bootstrap$Spinner$small = $rundis$elm_bootstrap$Bootstrap$Spinner$Size(1);
 var $elm$html$Html$small = _VirtualDom_node('small');
+var $rundis$elm_bootstrap$Bootstrap$Spinner$applyModifier = F2(
+	function (modifier, options) {
+		switch (modifier.$) {
+			case 0:
+				var spinnerKind = modifier.a;
+				return _Utils_update(
+					options,
+					{ah: spinnerKind});
+			case 1:
+				var spinnerSize = modifier.a;
+				return _Utils_update(
+					options,
+					{di: spinnerSize});
+			case 2:
+				var color_ = modifier.a;
+				return _Utils_update(
+					options,
+					{
+						aR: $elm$core$Maybe$Just(color_)
+					});
+			default:
+				var list = modifier.a;
+				return _Utils_update(
+					options,
+					{aI: list});
+		}
+	});
+var $rundis$elm_bootstrap$Bootstrap$Spinner$Border = 0;
+var $rundis$elm_bootstrap$Bootstrap$Spinner$Normal = 0;
+var $rundis$elm_bootstrap$Bootstrap$Spinner$defaultOptions = {aI: _List_Nil, aR: $elm$core$Maybe$Nothing, ah: 0, di: 0};
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $rundis$elm_bootstrap$Bootstrap$Spinner$kindClassName = function (kind_) {
+	if (!kind_) {
+		return 'spinner-border';
+	} else {
+		return 'spinner-grow';
+	}
+};
+var $rundis$elm_bootstrap$Bootstrap$Spinner$kindClass = A2($elm$core$Basics$composeL, $elm$html$Html$Attributes$class, $rundis$elm_bootstrap$Bootstrap$Spinner$kindClassName);
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $rundis$elm_bootstrap$Bootstrap$Spinner$sizeAttributes = F2(
+	function (size_, kind_) {
+		switch (size_) {
+			case 0:
+				return $elm$core$Maybe$Nothing;
+			case 1:
+				return $elm$core$Maybe$Just(
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class(
+							$rundis$elm_bootstrap$Bootstrap$Spinner$kindClassName(kind_) + '-sm')
+						]));
+			default:
+				return $elm$core$Maybe$Just(
+					_List_fromArray(
+						[
+							A2($elm$html$Html$Attributes$style, 'width', '3rem'),
+							A2($elm$html$Html$Attributes$style, 'height', '3rem')
+						]));
+		}
+	});
+var $rundis$elm_bootstrap$Bootstrap$Internal$Text$textColorClass = function (color) {
+	if (color.$ === 1) {
+		return $elm$html$Html$Attributes$class('text-white');
+	} else {
+		var role = color.a;
+		return A2($rundis$elm_bootstrap$Bootstrap$Internal$Role$toClass, 'text', role);
+	}
+};
+var $rundis$elm_bootstrap$Bootstrap$Spinner$toAttributes = function (options) {
+	return _Utils_ap(
+		A2(
+			$elm$core$List$filterMap,
+			$elm$core$Basics$identity,
+			_List_fromArray(
+				[
+					$elm$core$Maybe$Just(
+					$rundis$elm_bootstrap$Bootstrap$Spinner$kindClass(options.ah)),
+					A2($elm$core$Maybe$map, $rundis$elm_bootstrap$Bootstrap$Internal$Text$textColorClass, options.aR)
+				])),
+		_Utils_ap(
+			A2(
+				$elm$core$Maybe$withDefault,
+				_List_Nil,
+				A2($rundis$elm_bootstrap$Bootstrap$Spinner$sizeAttributes, options.di, options.ah)),
+			_Utils_ap(
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$attribute, 'role', 'status')
+					]),
+				options.aI)));
+};
+var $rundis$elm_bootstrap$Bootstrap$Spinner$spinner = F2(
+	function (options, children) {
+		var opts = A3($elm$core$List$foldl, $rundis$elm_bootstrap$Bootstrap$Spinner$applyModifier, $rundis$elm_bootstrap$Bootstrap$Spinner$defaultOptions, options);
+		return A2(
+			$elm$html$Html$div,
+			$rundis$elm_bootstrap$Bootstrap$Spinner$toAttributes(opts),
+			children);
+	});
 var $elm_community$maybe_extra$Maybe$Extra$unwrap = F3(
 	function (_default, f, m) {
 		if (m.$ === 1) {
@@ -7822,13 +7932,18 @@ var $author$project$Main$viewStation = F2(
 	function (currentTime, station) {
 		var effectiveTime = $elm$time$Time$millisToPosix(
 			1000 + $elm$time$Time$posixToMillis(currentTime));
-		var timeTxt = function () {
+		var loadedWhenInfo = function () {
 			var _v0 = station.b5;
 			if (!_v0.$) {
-				return 'loading...';
+				return A2(
+					$rundis$elm_bootstrap$Bootstrap$Spinner$spinner,
+					_List_fromArray(
+						[$rundis$elm_bootstrap$Bootstrap$Spinner$small]),
+					_List_Nil);
 			} else {
 				var time = _v0.a;
-				return A2($ryannhg$date_format$DateFormat$Relative$relativeTime, effectiveTime, time);
+				return $elm$html$Html$text(
+					A2($ryannhg$date_format$DateFormat$Relative$relativeTime, effectiveTime, time));
 			}
 		}();
 		return A2(
@@ -7867,9 +7982,7 @@ var $author$project$Main$viewStation = F2(
 									$elm$html$Html$Attributes$class('ml-auto')
 								]),
 							_List_fromArray(
-								[
-									$elm$html$Html$text(timeTxt)
-								]))
+								[loadedWhenInfo]))
 						])),
 					A2(
 					$elm$html$Html$p,
