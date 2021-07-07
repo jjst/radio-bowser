@@ -187,25 +187,26 @@ subscriptions model =
 
 view : Model -> Html Msg
 view {stations, time} =
-  case stations of
-    Failure ->
-      text "I was unable to load radio stations."
+  let
+      mainView =
+        case stations of
+          Failure ->
+            text "I was unable to load radio stations."
 
-    Loading ->
-      text "Loading..."
+          Loading ->
+            text ""
 
-    Success s ->
-      let
-        items = s
-          |> Dict.values
-          |> List.map (viewStation time)
-      in
-        Grid.container []
-            [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
-            , Grid.row []
-                [ Grid.col [] [ ListGroup.custom items ] ]
+          Success s ->
+            s |> Dict.values
+              |> List.map (viewStation time)
+              |> ListGroup.custom
+  in
+  Grid.container []
+      [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
+      , Grid.row []
+          [ Grid.col [] [ mainView ] ]
 
-            ]
+      ]
 
 viewStation : Time.Posix -> StationInfo -> ListGroup.CustomItem Msg
 viewStation currentTime station =
