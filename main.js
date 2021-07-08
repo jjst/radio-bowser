@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.cp.ai === region.cH.ai)
+	if (region.cq.ai === region.cH.ai)
 	{
-		return 'on line ' + region.cp.ai;
+		return 'on line ' + region.cq.ai;
 	}
-	return 'on lines ' + region.cp.ai + ' through ' + region.cH.ai;
+	return 'on lines ' + region.cq.ai + ' through ' + region.cH.ai;
 }
 
 
@@ -2705,8 +2705,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		x: func(record.x),
-		cr: record.cr,
-		ce: record.ce
+		cs: record.cs,
+		cf: record.cf
 	}
 });
 
@@ -2975,10 +2975,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.x;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.cr;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.cs;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.ce) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.cf) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3968,7 +3968,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.d6,
 		impl.d$,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.ci && impl.ci(sendToApp)
+			var divertHrefToApp = impl.cj && impl.cj(sendToApp)
 			var view = impl.d7;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4043,7 +4043,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		ci: function(sendToApp)
+		cj: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4533,43 +4533,6 @@ function _Http_track(router, xhr, tracker)
 }
 
 
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
-
-
-
 function _Time_now(millisToPosix)
 {
 	return _Scheduler_binding(function(callback)
@@ -4613,6 +4576,43 @@ function _Time_getZoneName()
 		callback(_Scheduler_succeed(name));
 	});
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
@@ -5399,7 +5399,7 @@ var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$Loading = {$: 1};
 var $author$project$Main$Model = F2(
 	function (stations, time) {
-		return {z: stations, cu: time};
+		return {z: stations, bJ: time};
 	});
 var $author$project$Main$GotStationList = function (a) {
 	return {$: 1, a: a};
@@ -6264,10 +6264,278 @@ var $author$project$Main$init = function (_v0) {
 			$elm$time$Time$millisToPosix(0)),
 		$author$project$Main$getStationList);
 };
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $author$project$Main$UpdateTime = function (a) {
+	return {$: 4, a: a};
+};
+var $elm$time$Time$Every = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var $elm$time$Time$State = F2(
+	function (taggers, processes) {
+		return {c7: processes, dk: taggers};
+	});
+var $elm$time$Time$init = $elm$core$Task$succeed(
+	A2($elm$time$Time$State, $elm$core$Dict$empty, $elm$core$Dict$empty));
+var $elm$time$Time$addMySub = F2(
+	function (_v0, state) {
+		var interval = _v0.a;
+		var tagger = _v0.b;
+		var _v1 = A2($elm$core$Dict$get, interval, state);
+		if (_v1.$ === 1) {
+			return A3(
+				$elm$core$Dict$insert,
+				interval,
+				_List_fromArray(
+					[tagger]),
+				state);
+		} else {
+			var taggers = _v1.a;
+			return A3(
+				$elm$core$Dict$insert,
+				interval,
+				A2($elm$core$List$cons, tagger, taggers),
+				state);
+		}
+	});
+var $elm$core$Dict$foldl = F3(
+	function (func, acc, dict) {
+		foldl:
+		while (true) {
+			if (dict.$ === -2) {
+				return acc;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3($elm$core$Dict$foldl, func, acc, left)),
+					$temp$dict = right;
+				func = $temp$func;
+				acc = $temp$acc;
+				dict = $temp$dict;
+				continue foldl;
+			}
+		}
+	});
+var $elm$core$Dict$merge = F6(
+	function (leftStep, bothStep, rightStep, leftDict, rightDict, initialResult) {
+		var stepState = F3(
+			function (rKey, rValue, _v0) {
+				stepState:
+				while (true) {
+					var list = _v0.a;
+					var result = _v0.b;
+					if (!list.b) {
+						return _Utils_Tuple2(
+							list,
+							A3(rightStep, rKey, rValue, result));
+					} else {
+						var _v2 = list.a;
+						var lKey = _v2.a;
+						var lValue = _v2.b;
+						var rest = list.b;
+						if (_Utils_cmp(lKey, rKey) < 0) {
+							var $temp$rKey = rKey,
+								$temp$rValue = rValue,
+								$temp$_v0 = _Utils_Tuple2(
+								rest,
+								A3(leftStep, lKey, lValue, result));
+							rKey = $temp$rKey;
+							rValue = $temp$rValue;
+							_v0 = $temp$_v0;
+							continue stepState;
+						} else {
+							if (_Utils_cmp(lKey, rKey) > 0) {
+								return _Utils_Tuple2(
+									list,
+									A3(rightStep, rKey, rValue, result));
+							} else {
+								return _Utils_Tuple2(
+									rest,
+									A4(bothStep, lKey, lValue, rValue, result));
+							}
+						}
+					}
+				}
+			});
+		var _v3 = A3(
+			$elm$core$Dict$foldl,
+			stepState,
+			_Utils_Tuple2(
+				$elm$core$Dict$toList(leftDict),
+				initialResult),
+			rightDict);
+		var leftovers = _v3.a;
+		var intermediateResult = _v3.b;
+		return A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v4, result) {
+					var k = _v4.a;
+					var v = _v4.b;
+					return A3(leftStep, k, v, result);
+				}),
+			intermediateResult,
+			leftovers);
+	});
+var $elm$time$Time$Name = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$time$Time$Offset = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var $elm$time$Time$customZone = $elm$time$Time$Zone;
+var $elm$time$Time$setInterval = _Time_setInterval;
+var $elm$time$Time$spawnHelp = F3(
+	function (router, intervals, processes) {
+		if (!intervals.b) {
+			return $elm$core$Task$succeed(processes);
+		} else {
+			var interval = intervals.a;
+			var rest = intervals.b;
+			var spawnTimer = $elm$core$Process$spawn(
+				A2(
+					$elm$time$Time$setInterval,
+					interval,
+					A2($elm$core$Platform$sendToSelf, router, interval)));
+			var spawnRest = function (id) {
+				return A3(
+					$elm$time$Time$spawnHelp,
+					router,
+					rest,
+					A3($elm$core$Dict$insert, interval, id, processes));
+			};
+			return A2($elm$core$Task$andThen, spawnRest, spawnTimer);
+		}
+	});
+var $elm$time$Time$onEffects = F3(
+	function (router, subs, _v0) {
+		var processes = _v0.c7;
+		var rightStep = F3(
+			function (_v6, id, _v7) {
+				var spawns = _v7.a;
+				var existing = _v7.b;
+				var kills = _v7.c;
+				return _Utils_Tuple3(
+					spawns,
+					existing,
+					A2(
+						$elm$core$Task$andThen,
+						function (_v5) {
+							return kills;
+						},
+						$elm$core$Process$kill(id)));
+			});
+		var newTaggers = A3($elm$core$List$foldl, $elm$time$Time$addMySub, $elm$core$Dict$empty, subs);
+		var leftStep = F3(
+			function (interval, taggers, _v4) {
+				var spawns = _v4.a;
+				var existing = _v4.b;
+				var kills = _v4.c;
+				return _Utils_Tuple3(
+					A2($elm$core$List$cons, interval, spawns),
+					existing,
+					kills);
+			});
+		var bothStep = F4(
+			function (interval, taggers, id, _v3) {
+				var spawns = _v3.a;
+				var existing = _v3.b;
+				var kills = _v3.c;
+				return _Utils_Tuple3(
+					spawns,
+					A3($elm$core$Dict$insert, interval, id, existing),
+					kills);
+			});
+		var _v1 = A6(
+			$elm$core$Dict$merge,
+			leftStep,
+			bothStep,
+			rightStep,
+			newTaggers,
+			processes,
+			_Utils_Tuple3(
+				_List_Nil,
+				$elm$core$Dict$empty,
+				$elm$core$Task$succeed(0)));
+		var spawnList = _v1.a;
+		var existingDict = _v1.b;
+		var killTask = _v1.c;
+		return A2(
+			$elm$core$Task$andThen,
+			function (newProcesses) {
+				return $elm$core$Task$succeed(
+					A2($elm$time$Time$State, newTaggers, newProcesses));
+			},
+			A2(
+				$elm$core$Task$andThen,
+				function (_v2) {
+					return A3($elm$time$Time$spawnHelp, router, spawnList, existingDict);
+				},
+				killTask));
+	});
+var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
+var $elm$time$Time$onSelfMsg = F3(
+	function (router, interval, state) {
+		var _v0 = A2($elm$core$Dict$get, interval, state.dk);
+		if (_v0.$ === 1) {
+			return $elm$core$Task$succeed(state);
+		} else {
+			var taggers = _v0.a;
+			var tellTaggers = function (time) {
+				return $elm$core$Task$sequence(
+					A2(
+						$elm$core$List$map,
+						function (tagger) {
+							return A2(
+								$elm$core$Platform$sendToApp,
+								router,
+								tagger(time));
+						},
+						taggers));
+			};
+			return A2(
+				$elm$core$Task$andThen,
+				function (_v1) {
+					return $elm$core$Task$succeed(state);
+				},
+				A2($elm$core$Task$andThen, tellTaggers, $elm$time$Time$now));
+		}
+	});
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $elm$time$Time$subMap = F2(
+	function (f, _v0) {
+		var interval = _v0.a;
+		var tagger = _v0.b;
+		return A2(
+			$elm$time$Time$Every,
+			interval,
+			A2($elm$core$Basics$composeL, f, tagger));
+	});
+_Platform_effectManagers['Time'] = _Platform_createManager($elm$time$Time$init, $elm$time$Time$onEffects, $elm$time$Time$onSelfMsg, 0, $elm$time$Time$subMap);
+var $elm$time$Time$subscription = _Platform_leaf('Time');
+var $elm$time$Time$every = F2(
+	function (interval, tagger) {
+		return $elm$time$Time$subscription(
+			A2($elm$time$Time$Every, interval, tagger));
+	});
+var $author$project$Main$timeRefreshRateSeconds = 30;
 var $author$project$Main$subscriptions = function (model) {
-	return $elm$core$Platform$Sub$none;
+	return A2($elm$time$Time$every, $author$project$Main$timeRefreshRateSeconds * 1000, $author$project$Main$UpdateTime);
 };
 var $author$project$Main$Failure = {$: 0};
 var $author$project$Main$LoadedAt = function (a) {
@@ -6331,18 +6599,6 @@ var $elm$random$Random$initialSeed = function (x) {
 	return $elm$random$Random$next(
 		A2($elm$random$Random$Seed, state2, incr));
 };
-var $elm$time$Time$Name = function (a) {
-	return {$: 0, a: a};
-};
-var $elm$time$Time$Offset = function (a) {
-	return {$: 1, a: a};
-};
-var $elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var $elm$time$Time$customZone = $elm$time$Time$Zone;
-var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
 var $elm$time$Time$posixToMillis = function (_v0) {
 	var millis = _v0;
 	return millis;
@@ -6412,7 +6668,7 @@ var $author$project$Main$GotNowPlayingInfo = F3(
 	});
 var $author$project$Main$NowPlayingInfo = F2(
 	function (title, itemType) {
-		return {b6: itemType, dn: title};
+		return {b7: itemType, dn: title};
 	});
 var $elm$core$Maybe$map2 = F3(
 	function (func, ma, mb) {
@@ -6546,7 +6802,7 @@ var $author$project$Main$update = F2(
 				}();
 				var isProgramme = function () {
 					if ((!result.$) && (!result.a.$)) {
-						var itemType = result.a.a.b6;
+						var itemType = result.a.a.b7;
 						return itemType === 'programme';
 					} else {
 						return false;
@@ -6568,14 +6824,21 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					model,
 					A2($author$project$Main$scheduleNowPlayingUpdateIn, delaySeconds, stationId));
-			default:
+			case 3:
 				var stationId = msg.a;
 				var time = msg.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{cu: time}),
+						{bJ: time}),
 					A2($author$project$Main$getNowPlaying, stationId, time));
+			default:
+				var time = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{bJ: time}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Column = function (a) {
@@ -6584,7 +6847,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Column = function (a) {
 var $rundis$elm_bootstrap$Bootstrap$Grid$col = F2(
 	function (options, children) {
 		return $rundis$elm_bootstrap$Bootstrap$Grid$Column(
-			{cB: children, ca: options});
+			{cB: children, cb: options});
 	});
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
@@ -6742,7 +7005,7 @@ var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$itemAttributes = function
 };
 var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$renderCustomItem = function (_v0) {
 	var itemFn = _v0.cS;
-	var options = _v0.ca;
+	var options = _v0.cb;
 	var children = _v0.cB;
 	return A2(
 		itemFn,
@@ -7391,7 +7654,7 @@ var $elm$html$Html$Keyed$node = $elm$virtual_dom$VirtualDom$keyedNode;
 var $rundis$elm_bootstrap$Bootstrap$Grid$renderCol = function (column) {
 	switch (column.$) {
 		case 0:
-			var options = column.a.ca;
+			var options = column.a.cb;
 			var children = column.a.cB;
 			return A2(
 				$elm$html$Html$div,
@@ -7401,7 +7664,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$renderCol = function (column) {
 			var e = column.a;
 			return e;
 		default:
-			var options = column.a.ca;
+			var options = column.a.cb;
 			var children = column.a.cB;
 			return A3(
 				$elm$html$Html$Keyed$node,
@@ -7454,31 +7717,31 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowVAlign = F2(
 				return _Utils_update(
 					options,
 					{
-						bQ: $elm$core$Maybe$Just(align_)
+						bR: $elm$core$Maybe$Just(align_)
 					});
 			case 1:
 				return _Utils_update(
 					options,
 					{
-						bO: $elm$core$Maybe$Just(align_)
+						bP: $elm$core$Maybe$Just(align_)
 					});
 			case 2:
 				return _Utils_update(
 					options,
 					{
-						bN: $elm$core$Maybe$Just(align_)
+						bO: $elm$core$Maybe$Just(align_)
 					});
 			case 3:
 				return _Utils_update(
 					options,
 					{
-						bM: $elm$core$Maybe$Just(align_)
+						bN: $elm$core$Maybe$Just(align_)
 					});
 			default:
 				return _Utils_update(
 					options,
 					{
-						bP: $elm$core$Maybe$Just(align_)
+						bQ: $elm$core$Maybe$Just(align_)
 					});
 		}
 	});
@@ -7500,7 +7763,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowOption = F2(
 				return A2($rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowHAlign, align, options);
 		}
 	});
-var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$defaultRowOptions = {aI: _List_Nil, aX: $elm$core$Maybe$Nothing, aY: $elm$core$Maybe$Nothing, aZ: $elm$core$Maybe$Nothing, a_: $elm$core$Maybe$Nothing, a$: $elm$core$Maybe$Nothing, bM: $elm$core$Maybe$Nothing, bN: $elm$core$Maybe$Nothing, bO: $elm$core$Maybe$Nothing, bP: $elm$core$Maybe$Nothing, bQ: $elm$core$Maybe$Nothing};
+var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$defaultRowOptions = {aI: _List_Nil, aX: $elm$core$Maybe$Nothing, aY: $elm$core$Maybe$Nothing, aZ: $elm$core$Maybe$Nothing, a_: $elm$core$Maybe$Nothing, a$: $elm$core$Maybe$Nothing, bN: $elm$core$Maybe$Nothing, bO: $elm$core$Maybe$Nothing, bP: $elm$core$Maybe$Nothing, bQ: $elm$core$Maybe$Nothing, bR: $elm$core$Maybe$Nothing};
 var $rundis$elm_bootstrap$Bootstrap$General$Internal$horizontalAlignOption = function (align) {
 	switch (align) {
 		case 0:
@@ -7550,7 +7813,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes = function (modi
 				$rundis$elm_bootstrap$Bootstrap$Grid$Internal$vAlignsToAttributes,
 				'align-items-',
 				_List_fromArray(
-					[options.bQ, options.bO, options.bN, options.bM, options.bP])),
+					[options.bR, options.bP, options.bO, options.bN, options.bQ])),
 			_Utils_ap(
 				$rundis$elm_bootstrap$Bootstrap$Grid$Internal$hAlignsToAttributes(
 					_List_fromArray(
@@ -7651,7 +7914,7 @@ var $rundis$elm_bootstrap$Bootstrap$ListGroup$anchor = F2(
 		return {
 			cB: children,
 			cS: $elm$html$Html$a,
-			ca: A2($elm$core$List$cons, $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Action, updOptions)
+			cb: A2($elm$core$List$cons, $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Action, updOptions)
 		};
 	});
 var $rundis$elm_bootstrap$Bootstrap$ListGroup$attrs = function (attrs_) {
@@ -7701,7 +7964,7 @@ var $ryannhg$date_format$DateFormat$Relative$defaultSomeSecondsAgo = function (s
 var $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo = function (years) {
 	return (years < 2) ? 'last year' : ($elm$core$String$fromInt(years) + ' years ago');
 };
-var $ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions = {b$: $ryannhg$date_format$DateFormat$Relative$defaultInSomeDays, b0: $ryannhg$date_format$DateFormat$Relative$defaultInSomeHours, b1: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMinutes, b2: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMonths, b3: $ryannhg$date_format$DateFormat$Relative$defaultInSomeSeconds, b4: $ryannhg$date_format$DateFormat$Relative$defaultInSomeYears, ch: $ryannhg$date_format$DateFormat$Relative$defaultRightNow, cj: $ryannhg$date_format$DateFormat$Relative$defaultSomeDaysAgo, ck: $ryannhg$date_format$DateFormat$Relative$defaultSomeHoursAgo, cl: $ryannhg$date_format$DateFormat$Relative$defaultSomeMinutesAgo, cm: $ryannhg$date_format$DateFormat$Relative$defaultSomeMonthsAgo, cn: $ryannhg$date_format$DateFormat$Relative$defaultSomeSecondsAgo, co: $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo};
+var $ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions = {b0: $ryannhg$date_format$DateFormat$Relative$defaultInSomeDays, b1: $ryannhg$date_format$DateFormat$Relative$defaultInSomeHours, b2: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMinutes, b3: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMonths, b4: $ryannhg$date_format$DateFormat$Relative$defaultInSomeSeconds, b5: $ryannhg$date_format$DateFormat$Relative$defaultInSomeYears, ci: $ryannhg$date_format$DateFormat$Relative$defaultRightNow, ck: $ryannhg$date_format$DateFormat$Relative$defaultSomeDaysAgo, cl: $ryannhg$date_format$DateFormat$Relative$defaultSomeHoursAgo, cm: $ryannhg$date_format$DateFormat$Relative$defaultSomeMinutesAgo, cn: $ryannhg$date_format$DateFormat$Relative$defaultSomeMonthsAgo, co: $ryannhg$date_format$DateFormat$Relative$defaultSomeSecondsAgo, cp: $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo};
 var $ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions = F6(
 	function (seconds, minutes, hours, days, months, years) {
 		return {cE: days, cO: hours, cX: minutes, cZ: months, dh: seconds, dA: years};
@@ -7720,7 +7983,7 @@ var $elm$time$Time$toAdjustedMinutesHelp = F3(
 			} else {
 				var era = eras.a;
 				var olderEras = eras.b;
-				if (_Utils_cmp(era.cp, posixMinutes) < 0) {
+				if (_Utils_cmp(era.cq, posixMinutes) < 0) {
 					return posixMinutes + era.c0;
 				} else {
 					var $temp$defaultOffset = defaultOffset,
@@ -7791,11 +8054,11 @@ var $elm$time$Time$utc = A2($elm$time$Time$Zone, 0, _List_Nil);
 var $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions = F3(
 	function (options, start, end) {
 		var differenceInMilliseconds = $ryannhg$date_format$DateFormat$Relative$toMilliseconds(end) - $ryannhg$date_format$DateFormat$Relative$toMilliseconds(start);
-		return (!differenceInMilliseconds) ? options.ch : A3(
+		return (!differenceInMilliseconds) ? options.ci : A3(
 			$ryannhg$date_format$DateFormat$Relative$relativeTimeWithFunctions,
 			$elm$time$Time$utc,
 			$elm$core$Basics$abs(differenceInMilliseconds),
-			(differenceInMilliseconds < 0) ? A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.cn, options.cl, options.ck, options.cj, options.cm, options.co) : A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.b3, options.b1, options.b0, options.b$, options.b2, options.b4));
+			(differenceInMilliseconds < 0) ? A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.co, options.cm, options.cl, options.ck, options.cn, options.cp) : A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.b4, options.b2, options.b1, options.b0, options.b3, options.b5));
 	});
 var $ryannhg$date_format$DateFormat$Relative$relativeTime = $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions($ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions);
 var $rundis$elm_bootstrap$Bootstrap$Spinner$Size = function (a) {
@@ -7834,11 +8097,6 @@ var $rundis$elm_bootstrap$Bootstrap$Spinner$applyModifier = F2(
 var $rundis$elm_bootstrap$Bootstrap$Spinner$Border = 0;
 var $rundis$elm_bootstrap$Bootstrap$Spinner$Normal = 0;
 var $rundis$elm_bootstrap$Bootstrap$Spinner$defaultOptions = {aI: _List_Nil, aR: $elm$core$Maybe$Nothing, ah: 0, di: 0};
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
 var $rundis$elm_bootstrap$Bootstrap$Spinner$kindClassName = function (kind_) {
 	if (!kind_) {
 		return 'spinner-border';
@@ -7920,7 +8178,7 @@ var $elm_community$maybe_extra$Maybe$Extra$unwrap = F3(
 	});
 var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 	var icon = function () {
-		var _v0 = nowPlayingInfo.b6;
+		var _v0 = nowPlayingInfo.b7;
 		switch (_v0) {
 			case 'song':
 				return '🎵';
@@ -8002,7 +8260,7 @@ var $author$project$Main$viewStation = F2(
 	});
 var $author$project$Main$view = function (_v0) {
 	var stations = _v0.z;
-	var time = _v0.cu;
+	var time = _v0.bJ;
 	var mainView = function () {
 		switch (stations.$) {
 			case 0:
