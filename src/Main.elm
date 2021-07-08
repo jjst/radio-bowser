@@ -135,20 +135,20 @@ update msg model =
           ({ model | stations = Failure }, Cmd.none)
     GotNowPlayingInfo stationId time result ->
       let
-        newStations =
+        updateStation station =
           case result of
             Ok np ->
-              case model.stations of
-                Success stations ->
-                  let
-                      updatedStations =
-                        stations |> Dict.update stationId (Maybe.map (\station -> { station | nowPlaying = np, loadingState = (LoadedAt time) }))
-                  in
-                      Success updatedStations
-                _ -> model.stations
-
+              { station | nowPlaying = np, loadingState = (LoadedAt time) }
             Err error ->
-              model.stations
+              { station | nowPlaying = Nothing, loadingState = (LoadedAt time) }
+        newStations =
+          case model.stations of
+            Success stations ->
+              let
+                  updatedStations = stations |> Dict.update stationId (Maybe.map updateStation)
+              in
+                  Success updatedStations
+            _ -> model.stations
         isProgramme = case result of
             Ok (Just {itemType}) -> itemType == "programme"
             _ -> False
