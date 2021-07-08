@@ -1,6 +1,6 @@
 @keyframes freshAnim {
-  0% { opacity: 0.5; background-color: #aaaaaa }
-  100% { opacity: 1.0; background-color: white }
+  0% { opacity: 0.5; background-color: rgba(200, 200, 200, 1) }
+  100% { opacity: 1.0; background-color: rgba(255, 255, 255, 0) }
 }
 
 p.now-playing.fresh {
