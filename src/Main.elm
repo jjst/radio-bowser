@@ -31,6 +31,9 @@ baseUrl = "https://now-playing-42nq5.ondigitalocean.app/api"
 stationRefreshRateSeconds : Float
 stationRefreshRateSeconds = 10
 
+timeRefreshRateSeconds : Float
+timeRefreshRateSeconds = 30
+
 jitterSeconds : Float
 jitterSeconds = 4
 
@@ -121,6 +124,7 @@ type Msg
   | GotStationList (Result Http.Error StationDict)
   | ScheduleNowPlayingUpdate StationId Float
   | UpdateNowPlaying StationId Time.Posix
+  | UpdateTime Time.Posix
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -166,6 +170,8 @@ update msg model =
           (model, scheduleNowPlayingUpdateIn delaySeconds stationId)
     UpdateNowPlaying stationId time ->
       ({ model | time = time }, getNowPlaying stationId time)
+    UpdateTime time ->
+      ({ model | time = time }, Cmd.none)
 
 
 scheduleNowPlayingUpdateIn : Float -> StationId -> Cmd Msg
@@ -178,7 +184,7 @@ scheduleNowPlayingUpdateIn delaySeconds stationId=
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Time.every (timeRefreshRateSeconds * 1000) UpdateTime
 
 
 
