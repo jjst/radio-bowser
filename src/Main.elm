@@ -7,7 +7,7 @@ import Browser
 import Html exposing (Html, img, text, div, small, p, h5, node)
 import Html.Attributes exposing (href, class, src, style, rel, href)
 import Http
-import Json.Decode exposing (Decoder, list, field, map, map2, map3, map4, nullable, string, succeed)
+import Json.Decode exposing (Decoder, list, field, map, map2, map3, map5, nullable, string, succeed)
 import Maybe.Extra
 import Process
 import Random
@@ -64,7 +64,7 @@ type Stations
   | Success (StationDict)
 
 type alias StationId = String
-type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe NowPlayingInfo, loadingState: LoadingState}
+type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe NowPlayingInfo, loadingState: LoadingState, fresh: Bool }
 type LoadingState
   = CurrentlyLoading
   | LoadedAt Time.Posix
@@ -109,11 +109,12 @@ stationListItemDecoder =
 
 stationInfoDecoder : Decoder StationInfo
 stationInfoDecoder =
-  map4 StationInfo
+  map5 StationInfo
     (field "name" string)
     (field "favicon" (nullable string))
     (succeed Nothing)
     (succeed CurrentlyLoading)
+    (succeed False)
 
 
 -- UPDATE
@@ -142,24 +143,20 @@ update msg model =
         updateStation station =
           case result of
             Ok np ->
-              { station | nowPlaying = np, loadingState = (LoadedAt time) }
+              { station | nowPlaying = np, loadingState = (LoadedAt time), fresh = (station.nowPlaying /= np) }
             Err error ->
-              { station | nowPlaying = Nothing, loadingState = (LoadedAt time) }
+              { station | nowPlaying = Nothing, loadingState = (LoadedAt time), fresh = False }
         newStations =
           case model.stations of
             Success stations ->
-              let
-                  updatedStations = stations |> Dict.update stationId (Maybe.map updateStation)
-              in
-                  Success updatedStations
-            _ -> model.stations
+              stations |> Dict.update stationId (Maybe.map updateStation) |> Success
+            _ ->
+              model.stations
         isProgramme = case result of
             Ok (Just {itemType}) -> itemType == "programme"
             _ -> False
         nextUpdateDelaySeconds =
           if isProgramme then
-            120
-          else if newStations /= model.stations then
             120
           else
             20
@@ -169,7 +166,15 @@ update msg model =
     ScheduleNowPlayingUpdate stationId delaySeconds ->
           (model, scheduleNowPlayingUpdateIn delaySeconds stationId)
     UpdateNowPlaying stationId time ->
-      ({ model | time = time }, getNowPlaying stationId time)
+      let
+          newStations =
+            case model.stations of
+              Success stations ->
+                stations |> Dict.update stationId (Maybe.map (\s -> { s | fresh = False, loadingState = CurrentlyLoading })) |> Success
+              _ ->
+                model.stations
+      in
+      ({ stations = newStations, time = time }, getNowPlaying stationId time)
     UpdateTime time ->
       ({ model | time = time }, Cmd.none)
 
@@ -228,6 +233,7 @@ viewStation currentTime station =
         case station.loadingState of
           CurrentlyLoading -> Spinner.spinner [ Spinner.small ] []
           LoadedAt time -> text (relativeTime effectiveTime time)
+      classes = if station.fresh then "now-playing fresh" else "now-playing"
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart ] ]
@@ -237,7 +243,7 @@ viewStation currentTime station =
               ]
           , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
           ]
-      , p [ Spacing.mb1 ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
+      , p [ Spacing.mb1, class classes ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
       ]
 
 viewNowPlayingInfo : NowPlayingInfo -> String
