@@ -12,10 +12,7 @@ jobs:
           elm-version: 0.19.1
       - name: Build 🔧
         run: |
-          mkdir build
-          elm make --optimize src/Main.elm --output=build/main.js
-          cp index.html build/
-          cp assets/* build/
+          ./build.sh
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:

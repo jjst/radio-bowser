@@ -4,8 +4,8 @@ import DateFormat.Relative exposing (relativeTime)
 import Dict exposing (Dict)
 import Dict
 import Browser
-import Html exposing (Html, img, text, div, small, p, h5)
-import Html.Attributes exposing (href, class, src, style)
+import Html exposing (Html, img, text, div, small, p, h5, node)
+import Html.Attributes exposing (href, class, src, style, rel, href)
 import Http
 import Json.Decode exposing (Decoder, list, field, map, map2, map3, map4, nullable, string, succeed)
 import Maybe.Extra
@@ -209,6 +209,7 @@ view {stations, time} =
   in
   Grid.container []
       [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
+      , css "style.css"
       , Grid.row []
           [ Grid.col [] [ mainView ] ]
 
@@ -248,3 +249,7 @@ viewNowPlayingInfo nowPlayingInfo =
         _ -> ""
   in
   icon ++ " " ++ nowPlayingInfo.title
+
+css : String -> Html a
+css path =
+    node "link" [ rel "stylesheet", href path ] []
