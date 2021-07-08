@@ -2704,7 +2704,7 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		y: func(record.y),
+		x: func(record.x),
 		cr: record.cr,
 		ce: record.ce
 	}
@@ -2974,7 +2974,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.y;
+		var message = !tag ? value : tag < 3 ? value.a : value.x;
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.cr;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
@@ -5399,7 +5399,7 @@ var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$Loading = {$: 1};
 var $author$project$Main$Model = F2(
 	function (stations, time) {
-		return {s: stations, cu: time};
+		return {z: stations, cu: time};
 	});
 var $author$project$Main$GotStationList = function (a) {
 	return {$: 1, a: a};
@@ -6213,7 +6213,7 @@ var $elm$core$Tuple$pair = F2(
 var $author$project$Main$CurrentlyLoading = {$: 0};
 var $author$project$Main$StationInfo = F4(
 	function (name, favicon, nowPlaying, loadingState) {
-		return {dK: favicon, b5: loadingState, c_: name, b7: nowPlaying};
+		return {dK: favicon, a6: loadingState, c_: name, a9: nowPlaying};
 	});
 var $elm$json$Json$Decode$map4 = _Json_map4;
 var $elm$json$Json$Decode$null = _Json_decodeNull;
@@ -6412,7 +6412,7 @@ var $author$project$Main$GotNowPlayingInfo = F3(
 	});
 var $author$project$Main$NowPlayingInfo = F2(
 	function (title, itemType) {
-		return {b4: itemType, dn: title};
+		return {b6: itemType, dn: title};
 	});
 var $elm$core$Maybe$map2 = F3(
 	function (func, ma, mb) {
@@ -6492,7 +6492,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								s: $author$project$Main$Success(stations)
+								z: $author$project$Main$Success(stations)
 							}),
 						$elm$core$Platform$Cmd$batch(
 							A2(
@@ -6504,50 +6504,55 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{s: $author$project$Main$Failure}),
+							{z: $author$project$Main$Failure}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 0:
 				var stationId = msg.a;
 				var time = msg.b;
 				var result = msg.c;
-				var newStations = function () {
+				var updateStation = function (station) {
 					if (!result.$) {
 						var np = result.a;
-						var _v4 = model.s;
-						if (_v4.$ === 2) {
-							var stations = _v4.a;
-							var updatedStations = A3(
-								$elm$core$Dict$update,
-								stationId,
-								$elm$core$Maybe$map(
-									function (station) {
-										return _Utils_update(
-											station,
-											{
-												b5: $author$project$Main$LoadedAt(time),
-												b7: np
-											});
-									}),
-								stations);
-							return $author$project$Main$Success(updatedStations);
-						} else {
-							return model.s;
-						}
+						return _Utils_update(
+							station,
+							{
+								a6: $author$project$Main$LoadedAt(time),
+								a9: np
+							});
 					} else {
 						var error = result.a;
-						return model.s;
+						return _Utils_update(
+							station,
+							{
+								a6: $author$project$Main$LoadedAt(time),
+								a9: $elm$core$Maybe$Nothing
+							});
+					}
+				};
+				var newStations = function () {
+					var _v3 = model.z;
+					if (_v3.$ === 2) {
+						var stations = _v3.a;
+						var updatedStations = A3(
+							$elm$core$Dict$update,
+							stationId,
+							$elm$core$Maybe$map(updateStation),
+							stations);
+						return $author$project$Main$Success(updatedStations);
+					} else {
+						return model.z;
 					}
 				}();
 				var isProgramme = function () {
 					if ((!result.$) && (!result.a.$)) {
-						var itemType = result.a.a.b4;
+						var itemType = result.a.a.b6;
 						return itemType === 'programme';
 					} else {
 						return false;
 					}
 				}();
-				var nextUpdateDelaySeconds = isProgramme ? 120 : ((!_Utils_eq(newStations, model.s)) ? 120 : 20);
+				var nextUpdateDelaySeconds = isProgramme ? 120 : ((!_Utils_eq(newStations, model.z)) ? 120 : 20);
 				var cmd = A2(
 					$elm$random$Random$generate,
 					$author$project$Main$ScheduleNowPlayingUpdate(stationId),
@@ -6555,7 +6560,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{s: newStations}),
+						{z: newStations}),
 					cmd);
 			case 2:
 				var stationId = msg.a;
@@ -6611,7 +6616,7 @@ var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$applyModifier = F2(
 				return _Utils_update(
 					options,
 					{
-						bA: $elm$core$Maybe$Just(role)
+						bC: $elm$core$Maybe$Just(role)
 					});
 			case 3:
 				return _Utils_update(
@@ -6634,7 +6639,7 @@ var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$applyModifier = F2(
 					});
 		}
 	});
-var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$defaultOptions = {ay: false, az: false, aI: _List_Nil, aV: false, bA: $elm$core$Maybe$Nothing};
+var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$defaultOptions = {ay: false, az: false, aI: _List_Nil, aV: false, bC: $elm$core$Maybe$Nothing};
 var $elm$core$List$filter = F2(
 	function (isGood, list) {
 		return A3(
@@ -6732,7 +6737,7 @@ var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$itemAttributes = function
 									A2($rundis$elm_bootstrap$Bootstrap$Internal$Role$toClass, 'list-group-item', r)
 								]);
 						},
-						options.bA)),
+						options.bC)),
 				options.aI)));
 };
 var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$renderCustomItem = function (_v0) {
@@ -6804,31 +6809,31 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColOffset = F2(
 				return _Utils_update(
 					options,
 					{
-						bd: $elm$core$Maybe$Just(offset_)
+						bf: $elm$core$Maybe$Just(offset_)
 					});
 			case 1:
 				return _Utils_update(
 					options,
 					{
-						ba: $elm$core$Maybe$Just(offset_)
+						bc: $elm$core$Maybe$Just(offset_)
 					});
 			case 2:
 				return _Utils_update(
 					options,
 					{
-						a9: $elm$core$Maybe$Just(offset_)
+						bb: $elm$core$Maybe$Just(offset_)
 					});
 			case 3:
 				return _Utils_update(
 					options,
 					{
-						a8: $elm$core$Maybe$Just(offset_)
+						ba: $elm$core$Maybe$Just(offset_)
 					});
 			default:
 				return _Utils_update(
 					options,
 					{
-						bc: $elm$core$Maybe$Just(offset_)
+						be: $elm$core$Maybe$Just(offset_)
 					});
 		}
 	});
@@ -6840,31 +6845,31 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColOrder = F2(
 				return _Utils_update(
 					options,
 					{
-						bn: $elm$core$Maybe$Just(order_)
+						bp: $elm$core$Maybe$Just(order_)
 					});
 			case 1:
 				return _Utils_update(
 					options,
 					{
-						bl: $elm$core$Maybe$Just(order_)
+						bn: $elm$core$Maybe$Just(order_)
 					});
 			case 2:
 				return _Utils_update(
 					options,
 					{
-						bk: $elm$core$Maybe$Just(order_)
+						bm: $elm$core$Maybe$Just(order_)
 					});
 			case 3:
 				return _Utils_update(
 					options,
 					{
-						bj: $elm$core$Maybe$Just(order_)
+						bl: $elm$core$Maybe$Just(order_)
 					});
 			default:
 				return _Utils_update(
 					options,
 					{
-						bm: $elm$core$Maybe$Just(order_)
+						bo: $elm$core$Maybe$Just(order_)
 					});
 		}
 	});
@@ -6876,31 +6881,31 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColPull = F2(
 				return _Utils_update(
 					options,
 					{
-						bt: $elm$core$Maybe$Just(pull_)
+						bv: $elm$core$Maybe$Just(pull_)
 					});
 			case 1:
 				return _Utils_update(
 					options,
 					{
-						br: $elm$core$Maybe$Just(pull_)
+						bt: $elm$core$Maybe$Just(pull_)
 					});
 			case 2:
 				return _Utils_update(
 					options,
 					{
-						bq: $elm$core$Maybe$Just(pull_)
+						bs: $elm$core$Maybe$Just(pull_)
 					});
 			case 3:
 				return _Utils_update(
 					options,
 					{
-						bp: $elm$core$Maybe$Just(pull_)
+						br: $elm$core$Maybe$Just(pull_)
 					});
 			default:
 				return _Utils_update(
 					options,
 					{
-						bs: $elm$core$Maybe$Just(pull_)
+						bu: $elm$core$Maybe$Just(pull_)
 					});
 		}
 	});
@@ -6912,31 +6917,31 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColPush = F2(
 				return _Utils_update(
 					options,
 					{
-						by: $elm$core$Maybe$Just(push_)
+						bA: $elm$core$Maybe$Just(push_)
 					});
 			case 1:
 				return _Utils_update(
 					options,
 					{
-						bw: $elm$core$Maybe$Just(push_)
+						by: $elm$core$Maybe$Just(push_)
 					});
 			case 2:
 				return _Utils_update(
 					options,
 					{
-						bv: $elm$core$Maybe$Just(push_)
+						bx: $elm$core$Maybe$Just(push_)
 					});
 			case 3:
 				return _Utils_update(
 					options,
 					{
-						bu: $elm$core$Maybe$Just(push_)
+						bw: $elm$core$Maybe$Just(push_)
 					});
 			default:
 				return _Utils_update(
 					options,
 					{
-						bx: $elm$core$Maybe$Just(push_)
+						bz: $elm$core$Maybe$Just(push_)
 					});
 		}
 	});
@@ -7009,7 +7014,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColOption = F2(
 				return _Utils_update(
 					options,
 					{
-						bG: $elm$core$Maybe$Just(align)
+						bI: $elm$core$Maybe$Just(align)
 					});
 		}
 	});
@@ -7090,7 +7095,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$colWidthsToAttributes = functi
 		$elm$core$Basics$identity,
 		A2($elm$core$List$map, width_, widths));
 };
-var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$defaultColOptions = {aB: $elm$core$Maybe$Nothing, aC: $elm$core$Maybe$Nothing, aD: $elm$core$Maybe$Nothing, aE: $elm$core$Maybe$Nothing, aF: $elm$core$Maybe$Nothing, aI: _List_Nil, a8: $elm$core$Maybe$Nothing, a9: $elm$core$Maybe$Nothing, ba: $elm$core$Maybe$Nothing, bc: $elm$core$Maybe$Nothing, bd: $elm$core$Maybe$Nothing, bj: $elm$core$Maybe$Nothing, bk: $elm$core$Maybe$Nothing, bl: $elm$core$Maybe$Nothing, bm: $elm$core$Maybe$Nothing, bn: $elm$core$Maybe$Nothing, bp: $elm$core$Maybe$Nothing, bq: $elm$core$Maybe$Nothing, br: $elm$core$Maybe$Nothing, bs: $elm$core$Maybe$Nothing, bt: $elm$core$Maybe$Nothing, bu: $elm$core$Maybe$Nothing, bv: $elm$core$Maybe$Nothing, bw: $elm$core$Maybe$Nothing, bx: $elm$core$Maybe$Nothing, by: $elm$core$Maybe$Nothing, bG: $elm$core$Maybe$Nothing, as: $elm$core$Maybe$Nothing, at: $elm$core$Maybe$Nothing, au: $elm$core$Maybe$Nothing, av: $elm$core$Maybe$Nothing, aw: $elm$core$Maybe$Nothing};
+var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$defaultColOptions = {aB: $elm$core$Maybe$Nothing, aC: $elm$core$Maybe$Nothing, aD: $elm$core$Maybe$Nothing, aE: $elm$core$Maybe$Nothing, aF: $elm$core$Maybe$Nothing, aI: _List_Nil, ba: $elm$core$Maybe$Nothing, bb: $elm$core$Maybe$Nothing, bc: $elm$core$Maybe$Nothing, be: $elm$core$Maybe$Nothing, bf: $elm$core$Maybe$Nothing, bl: $elm$core$Maybe$Nothing, bm: $elm$core$Maybe$Nothing, bn: $elm$core$Maybe$Nothing, bo: $elm$core$Maybe$Nothing, bp: $elm$core$Maybe$Nothing, br: $elm$core$Maybe$Nothing, bs: $elm$core$Maybe$Nothing, bt: $elm$core$Maybe$Nothing, bu: $elm$core$Maybe$Nothing, bv: $elm$core$Maybe$Nothing, bw: $elm$core$Maybe$Nothing, bx: $elm$core$Maybe$Nothing, by: $elm$core$Maybe$Nothing, bz: $elm$core$Maybe$Nothing, bA: $elm$core$Maybe$Nothing, bI: $elm$core$Maybe$Nothing, as: $elm$core$Maybe$Nothing, at: $elm$core$Maybe$Nothing, au: $elm$core$Maybe$Nothing, av: $elm$core$Maybe$Nothing, aw: $elm$core$Maybe$Nothing};
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$offsetCountOption = function (size) {
 	switch (size) {
 		case 0:
@@ -7344,19 +7349,19 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$colAttributes = function (modi
 		_Utils_ap(
 			$rundis$elm_bootstrap$Bootstrap$Grid$Internal$offsetsToAttributes(
 				_List_fromArray(
-					[options.bd, options.ba, options.a9, options.a8, options.bc])),
+					[options.bf, options.bc, options.bb, options.ba, options.be])),
 			_Utils_ap(
 				$rundis$elm_bootstrap$Bootstrap$Grid$Internal$pullsToAttributes(
 					_List_fromArray(
-						[options.bt, options.br, options.bq, options.bp, options.bs])),
+						[options.bv, options.bt, options.bs, options.br, options.bu])),
 				_Utils_ap(
 					$rundis$elm_bootstrap$Bootstrap$Grid$Internal$pushesToAttributes(
 						_List_fromArray(
-							[options.by, options.bw, options.bv, options.bu, options.bx])),
+							[options.bA, options.by, options.bx, options.bw, options.bz])),
 					_Utils_ap(
 						$rundis$elm_bootstrap$Bootstrap$Grid$Internal$orderToAttributes(
 							_List_fromArray(
-								[options.bn, options.bl, options.bk, options.bj, options.bm])),
+								[options.bp, options.bn, options.bm, options.bl, options.bo])),
 						_Utils_ap(
 							A2(
 								$rundis$elm_bootstrap$Bootstrap$Grid$Internal$vAlignsToAttributes,
@@ -7365,7 +7370,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$colAttributes = function (modi
 									[options.aF, options.aD, options.aC, options.aB, options.aE])),
 							_Utils_ap(
 								function () {
-									var _v0 = options.bG;
+									var _v0 = options.bI;
 									if (!_v0.$) {
 										var a = _v0.a;
 										return _List_fromArray(
@@ -7449,31 +7454,31 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowVAlign = F2(
 				return _Utils_update(
 					options,
 					{
-						bO: $elm$core$Maybe$Just(align_)
+						bQ: $elm$core$Maybe$Just(align_)
 					});
 			case 1:
 				return _Utils_update(
 					options,
 					{
-						bM: $elm$core$Maybe$Just(align_)
+						bO: $elm$core$Maybe$Just(align_)
 					});
 			case 2:
 				return _Utils_update(
 					options,
 					{
-						bL: $elm$core$Maybe$Just(align_)
+						bN: $elm$core$Maybe$Just(align_)
 					});
 			case 3:
 				return _Utils_update(
 					options,
 					{
-						bK: $elm$core$Maybe$Just(align_)
+						bM: $elm$core$Maybe$Just(align_)
 					});
 			default:
 				return _Utils_update(
 					options,
 					{
-						bN: $elm$core$Maybe$Just(align_)
+						bP: $elm$core$Maybe$Just(align_)
 					});
 		}
 	});
@@ -7495,7 +7500,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowOption = F2(
 				return A2($rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowHAlign, align, options);
 		}
 	});
-var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$defaultRowOptions = {aI: _List_Nil, aX: $elm$core$Maybe$Nothing, aY: $elm$core$Maybe$Nothing, aZ: $elm$core$Maybe$Nothing, a_: $elm$core$Maybe$Nothing, a$: $elm$core$Maybe$Nothing, bK: $elm$core$Maybe$Nothing, bL: $elm$core$Maybe$Nothing, bM: $elm$core$Maybe$Nothing, bN: $elm$core$Maybe$Nothing, bO: $elm$core$Maybe$Nothing};
+var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$defaultRowOptions = {aI: _List_Nil, aX: $elm$core$Maybe$Nothing, aY: $elm$core$Maybe$Nothing, aZ: $elm$core$Maybe$Nothing, a_: $elm$core$Maybe$Nothing, a$: $elm$core$Maybe$Nothing, bM: $elm$core$Maybe$Nothing, bN: $elm$core$Maybe$Nothing, bO: $elm$core$Maybe$Nothing, bP: $elm$core$Maybe$Nothing, bQ: $elm$core$Maybe$Nothing};
 var $rundis$elm_bootstrap$Bootstrap$General$Internal$horizontalAlignOption = function (align) {
 	switch (align) {
 		case 0:
@@ -7545,7 +7550,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes = function (modi
 				$rundis$elm_bootstrap$Bootstrap$Grid$Internal$vAlignsToAttributes,
 				'align-items-',
 				_List_fromArray(
-					[options.bO, options.bM, options.bL, options.bK, options.bN])),
+					[options.bQ, options.bO, options.bN, options.bM, options.bP])),
 			_Utils_ap(
 				$rundis$elm_bootstrap$Bootstrap$Grid$Internal$hAlignsToAttributes(
 					_List_fromArray(
@@ -7696,7 +7701,7 @@ var $ryannhg$date_format$DateFormat$Relative$defaultSomeSecondsAgo = function (s
 var $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo = function (years) {
 	return (years < 2) ? 'last year' : ($elm$core$String$fromInt(years) + ' years ago');
 };
-var $ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions = {bZ: $ryannhg$date_format$DateFormat$Relative$defaultInSomeDays, b_: $ryannhg$date_format$DateFormat$Relative$defaultInSomeHours, b$: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMinutes, b0: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMonths, b1: $ryannhg$date_format$DateFormat$Relative$defaultInSomeSeconds, b2: $ryannhg$date_format$DateFormat$Relative$defaultInSomeYears, ch: $ryannhg$date_format$DateFormat$Relative$defaultRightNow, cj: $ryannhg$date_format$DateFormat$Relative$defaultSomeDaysAgo, ck: $ryannhg$date_format$DateFormat$Relative$defaultSomeHoursAgo, cl: $ryannhg$date_format$DateFormat$Relative$defaultSomeMinutesAgo, cm: $ryannhg$date_format$DateFormat$Relative$defaultSomeMonthsAgo, cn: $ryannhg$date_format$DateFormat$Relative$defaultSomeSecondsAgo, co: $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo};
+var $ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions = {b$: $ryannhg$date_format$DateFormat$Relative$defaultInSomeDays, b0: $ryannhg$date_format$DateFormat$Relative$defaultInSomeHours, b1: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMinutes, b2: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMonths, b3: $ryannhg$date_format$DateFormat$Relative$defaultInSomeSeconds, b4: $ryannhg$date_format$DateFormat$Relative$defaultInSomeYears, ch: $ryannhg$date_format$DateFormat$Relative$defaultRightNow, cj: $ryannhg$date_format$DateFormat$Relative$defaultSomeDaysAgo, ck: $ryannhg$date_format$DateFormat$Relative$defaultSomeHoursAgo, cl: $ryannhg$date_format$DateFormat$Relative$defaultSomeMinutesAgo, cm: $ryannhg$date_format$DateFormat$Relative$defaultSomeMonthsAgo, cn: $ryannhg$date_format$DateFormat$Relative$defaultSomeSecondsAgo, co: $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo};
 var $ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions = F6(
 	function (seconds, minutes, hours, days, months, years) {
 		return {cE: days, cO: hours, cX: minutes, cZ: months, dh: seconds, dA: years};
@@ -7790,7 +7795,7 @@ var $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions = F3(
 			$ryannhg$date_format$DateFormat$Relative$relativeTimeWithFunctions,
 			$elm$time$Time$utc,
 			$elm$core$Basics$abs(differenceInMilliseconds),
-			(differenceInMilliseconds < 0) ? A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.cn, options.cl, options.ck, options.cj, options.cm, options.co) : A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.b1, options.b$, options.b_, options.bZ, options.b0, options.b2));
+			(differenceInMilliseconds < 0) ? A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.cn, options.cl, options.ck, options.cj, options.cm, options.co) : A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.b3, options.b1, options.b0, options.b$, options.b2, options.b4));
 	});
 var $ryannhg$date_format$DateFormat$Relative$relativeTime = $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions($ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions);
 var $rundis$elm_bootstrap$Bootstrap$Spinner$Size = function (a) {
@@ -7915,7 +7920,7 @@ var $elm_community$maybe_extra$Maybe$Extra$unwrap = F3(
 	});
 var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 	var icon = function () {
-		var _v0 = nowPlayingInfo.b4;
+		var _v0 = nowPlayingInfo.b6;
 		switch (_v0) {
 			case 'song':
 				return '🎵';
@@ -7933,7 +7938,7 @@ var $author$project$Main$viewStation = F2(
 		var effectiveTime = $elm$time$Time$millisToPosix(
 			1000 + $elm$time$Time$posixToMillis(currentTime));
 		var loadedWhenInfo = function () {
-			var _v0 = station.b5;
+			var _v0 = station.a6;
 			if (!_v0.$) {
 				return A2(
 					$rundis$elm_bootstrap$Bootstrap$Spinner$spinner,
@@ -7991,12 +7996,12 @@ var $author$project$Main$viewStation = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							A3($elm_community$maybe_extra$Maybe$Extra$unwrap, '', $author$project$Main$viewNowPlayingInfo, station.b7))
+							A3($elm_community$maybe_extra$Maybe$Extra$unwrap, '', $author$project$Main$viewNowPlayingInfo, station.a9))
 						]))
 				]));
 	});
 var $author$project$Main$view = function (_v0) {
-	var stations = _v0.s;
+	var stations = _v0.z;
 	var time = _v0.cu;
 	var mainView = function () {
 		switch (stations.$) {
