@@ -6745,17 +6745,19 @@ var $author$project$Main$update = F2(
 				var result = msg.a;
 				if (!result.$) {
 					var stations = result.a;
+					var command = $elm$core$Platform$Cmd$batch(
+						A2(
+							$elm$core$List$map,
+							$author$project$Main$scheduleNowPlayingUpdateIn(0),
+							$elm$core$List$reverse(
+								$elm$core$Dict$keys(stations))));
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
 								r: $author$project$Main$Success(stations)
 							}),
-						$elm$core$Platform$Cmd$batch(
-							A2(
-								$elm$core$List$map,
-								$author$project$Main$scheduleNowPlayingUpdateIn(0),
-								$elm$core$Dict$keys(stations))));
+						command);
 				} else {
 					var error = result.a;
 					return _Utils_Tuple2(
@@ -8250,7 +8252,8 @@ var $author$project$Main$viewStation = F2(
 						[
 							$elm$html$Html$Attributes$href('#'),
 							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$col,
-							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$alignItemsStart
+							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$alignItemsStart,
+							$elm$html$Html$Attributes$class(classes)
 						]))
 				]),
 			_List_fromArray(
@@ -8282,10 +8285,7 @@ var $author$project$Main$viewStation = F2(
 					A2(
 					$elm$html$Html$p,
 					_List_fromArray(
-						[
-							$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1,
-							$elm$html$Html$Attributes$class(classes)
-						]),
+						[$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1]),
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
