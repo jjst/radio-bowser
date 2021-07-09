@@ -1,9 +1,9 @@
 @keyframes freshAnim {
-  0% { opacity: 0.5; background-color: rgba(200, 200, 200, 1) }
+  0% { opacity: 0.5; background-color: rgba(235, 235, 250, 1) }
   100% { opacity: 1.0; background-color: rgba(255, 255, 255, 0) }
 }
 
-p.now-playing.fresh {
+.now-playing.fresh {
   opacity: 0.0;
   animation-name: freshAnim;
   animation-duration: 1.8s;

@@ -134,7 +134,15 @@ update msg model =
     GotStationList result ->
       case result of
         Ok stations ->
-          ({model | stations = Success stations }, Dict.keys stations |> List.map (scheduleNowPlayingUpdateIn 0) |> Cmd.batch)
+          let
+              command =
+                stations
+                  |> Dict.keys
+                  |> List.reverse
+                  |> List.map (scheduleNowPlayingUpdateIn 0)
+                  |> Cmd.batch
+          in
+          ({model | stations = Success stations }, command)
 
         Err error ->
           ({ model | stations = Failure }, Cmd.none)
@@ -236,14 +244,14 @@ viewStation currentTime station =
       classes = if station.fresh then "now-playing fresh" else "now-playing"
   in
   ListGroup.anchor
-      [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart ] ]
+      [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart, class classes ] ]
       [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
           [ h5 [ Spacing.m1 ]
               [ text station.name
               ]
           , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
           ]
-      , p [ Spacing.mb1, class classes ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
+      , p [ Spacing.mb1 ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
       ]
 
 viewNowPlayingInfo : NowPlayingInfo -> String
