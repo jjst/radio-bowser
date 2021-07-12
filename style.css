@@ -3,6 +3,15 @@
   100% { opacity: 1.0; background-color: rgba(255, 255, 255, 0) }
 }
 
+.station-name {
+  text-transform: uppercase;
+}
+
+.now-playing {
+  font-family: monospace;
+  font-size: medium;
+}
+
 .now-playing.fresh {
   opacity: 0.0;
   animation-name: freshAnim;

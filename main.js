@@ -8242,7 +8242,7 @@ var $author$project$Main$viewStation = F2(
 					A2($ryannhg$date_format$DateFormat$Relative$relativeTime, effectiveTime, time));
 			}
 		}();
-		var classes = station.ab ? 'now-playing fresh' : 'now-playing';
+		var classes = station.ab ? 'radio-station fresh' : 'radio-station';
 		return A2(
 			$rundis$elm_bootstrap$Bootstrap$ListGroup$anchor,
 			_List_fromArray(
@@ -8267,7 +8267,10 @@ var $author$project$Main$viewStation = F2(
 							A2(
 							$elm$html$Html$h5,
 							_List_fromArray(
-								[$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1]),
+								[
+									$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
+									$elm$html$Html$Attributes$class('station-name')
+								]),
 							_List_fromArray(
 								[
 									$elm$html$Html$text(station.c$)
@@ -8285,7 +8288,10 @@ var $author$project$Main$viewStation = F2(
 					A2(
 					$elm$html$Html$p,
 					_List_fromArray(
-						[$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1]),
+						[
+							$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1,
+							$elm$html$Html$Attributes$class('now-playing')
+						]),
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
