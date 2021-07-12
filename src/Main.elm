@@ -241,17 +241,17 @@ viewStation currentTime station =
         case station.loadingState of
           CurrentlyLoading -> Spinner.spinner [ Spinner.small ] []
           LoadedAt time -> text (relativeTime effectiveTime time)
-      classes = if station.fresh then "now-playing fresh" else "now-playing"
+      classes = if station.fresh then "radio-station fresh" else "radio-station"
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart, class classes ] ]
       [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
-          [ h5 [ Spacing.m1 ]
+          [ h5 [ Spacing.m1, class "station-name" ]
               [ text station.name
               ]
           , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
           ]
-      , p [ Spacing.mb1 ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
+      , p [ Spacing.mb1, class "now-playing" ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
       ]
 
 viewNowPlayingInfo : NowPlayingInfo -> String
