@@ -6671,32 +6671,27 @@ var $author$project$Main$NowPlayingInfo = F2(
 	function (title, itemType) {
 		return {b8: itemType, $7: title};
 	});
-var $elm$core$Maybe$map2 = F3(
-	function (func, ma, mb) {
-		if (ma.$ === 1) {
-			return $elm$core$Maybe$Nothing;
-		} else {
-			var a = ma.a;
-			if (mb.$ === 1) {
-				return $elm$core$Maybe$Nothing;
-			} else {
-				var b = mb.a;
-				return $elm$core$Maybe$Just(
-					A2(func, a, b));
-			}
-		}
-	});
-var $author$project$Main$nowPlayingDecoder = A3(
-	$elm$json$Json$Decode$map2,
-	$elm$core$Maybe$map2($author$project$Main$NowPlayingInfo),
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Main$nowPlayingDecoder = A2(
+	$elm$json$Json$Decode$map,
+	$elm$core$List$head,
 	A2(
 		$elm$json$Json$Decode$field,
-		'title',
-		$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string)),
-	A2(
-		$elm$json$Json$Decode$field,
-		'type',
-		$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string)));
+		'items',
+		$elm$json$Json$Decode$list(
+			A3(
+				$elm$json$Json$Decode$map2,
+				$author$project$Main$NowPlayingInfo,
+				A2($elm$json$Json$Decode$field, 'text', $elm$json$Json$Decode$string),
+				A2($elm$json$Json$Decode$field, 'type', $elm$json$Json$Decode$string)))));
 var $author$project$Main$getNowPlaying = F2(
 	function (stationId, time) {
 		return $elm$http$Http$get(
