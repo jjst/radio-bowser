@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import DateFormat.Relative exposing (relativeTime)
+import Debug
 import Dict exposing (Dict)
 import Dict
 import Browser
@@ -93,9 +94,13 @@ getNowPlaying stationId time =
 
 nowPlayingDecoder : Decoder (Maybe NowPlayingInfo)
 nowPlayingDecoder =
-  map2 (Maybe.map2 NowPlayingInfo)
-    (field "title" (nullable string))
-    (field "type" (nullable string))
+  field "items" (
+    list (
+      map2 NowPlayingInfo
+        (field "text" string)
+        (field "type" string)
+    )
+  ) |> map List.head
 
 stationListDecoder : Decoder StationDict
 stationListDecoder =
