@@ -1,5 +1,6 @@
-module Main exposing (main)
+port module Main exposing (main)
 
+import Audio exposing (Audio, AudioData)
 import DateFormat.Relative exposing (relativeTime)
 import Debug
 import Dict exposing (Dict)
@@ -8,6 +9,7 @@ import Browser
 import Html exposing (Html, img, text, div, small, p, h5, node)
 import Html.Attributes exposing (href, class, src, style, rel, href)
 import Http
+import Json.Encode
 import Json.Decode exposing (Decoder, list, field, map, map2, map3, map5, nullable, string, succeed)
 import Maybe.Extra
 import Process
@@ -38,15 +40,22 @@ timeRefreshRateSeconds = 30
 jitterSeconds : Float
 jitterSeconds = 4
 
+-- PORTS
+
+port audioPortToJS : Json.Encode.Value -> Cmd msg
+port audioPortFromJS : (Json.Decode.Value -> msg) -> Sub msg
+
 -- MAIN
 
 
 main =
-  Browser.element
+  Audio.elementWithAudio
     { init = init
     , update = update
     , subscriptions = subscriptions
     , view = view
+    , audio = audio
+    , audioPort = { toJS = audioPortToJS, fromJS = audioPortFromJS }
     }
 
 
@@ -72,10 +81,11 @@ type LoadingState
 type alias NowPlayingInfo = {title: String, itemType: String}
 type alias StationDict = Dict StationId StationInfo
 
-init : () -> (Model, Cmd Msg)
+init : () -> (Model, Cmd Msg, Audio.AudioCmd Msg)
 init _ =
   ( Model Loading (Time.millisToPosix 0)
   , getStationList
+  , Audio.cmdNone
   )
 
 getStationList : Cmd Msg
@@ -133,8 +143,8 @@ type Msg
   | UpdateTime Time.Posix
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+update : AudioData -> Msg -> Model -> (Model, Cmd Msg, Audio.AudioCmd Msg)
+update _ msg model =
   case msg of
     GotStationList result ->
       case result of
@@ -147,10 +157,10 @@ update msg model =
                   |> List.map (scheduleNowPlayingUpdateIn 0)
                   |> Cmd.batch
           in
-          ({model | stations = Success stations }, command)
+          ({model | stations = Success stations }, command, Audio.cmdNone)
 
         Err error ->
-          ({ model | stations = Failure }, Cmd.none)
+          ({ model | stations = Failure }, Cmd.none, Audio.cmdNone)
     GotNowPlayingInfo stationId time result ->
       let
         updateStation station =
@@ -175,9 +185,9 @@ update msg model =
             20
         cmd = Random.generate (ScheduleNowPlayingUpdate stationId) (Random.float (nextUpdateDelaySeconds - jitterSeconds) (nextUpdateDelaySeconds + jitterSeconds))
       in
-        ({ model | stations = newStations }, cmd)
+        ({ model | stations = newStations }, cmd, Audio.cmdNone)
     ScheduleNowPlayingUpdate stationId delaySeconds ->
-          (model, scheduleNowPlayingUpdateIn delaySeconds stationId)
+          (model, scheduleNowPlayingUpdateIn delaySeconds stationId, Audio.cmdNone)
     UpdateNowPlaying stationId time ->
       let
           newStations =
@@ -187,9 +197,9 @@ update msg model =
               _ ->
                 model.stations
       in
-      ({ stations = newStations, time = time }, getNowPlaying stationId time)
+      ({ stations = newStations, time = time }, getNowPlaying stationId time, Audio.cmdNone)
     UpdateTime time ->
-      ({ model | time = time }, Cmd.none)
+      ({ model | time = time }, Cmd.none, Audio.cmdNone)
 
 
 scheduleNowPlayingUpdateIn : Float -> StationId -> Cmd Msg
@@ -200,8 +210,8 @@ scheduleNowPlayingUpdateIn delaySeconds stationId=
 -- SUBSCRIPTIONS
 
 
-subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions : AudioData -> Model -> Sub Msg
+subscriptions _ model =
   Time.every (timeRefreshRateSeconds * 1000) UpdateTime
 
 
@@ -209,8 +219,8 @@ subscriptions model =
 -- VIEW
 
 
-view : Model -> Html Msg
-view {stations, time} =
+view : AudioData -> Model -> Html Msg
+view _ {stations, time} =
   let
       mainView =
         case stations of
@@ -272,3 +282,9 @@ viewNowPlayingInfo nowPlayingInfo =
 css : String -> Html a
 css path =
     node "link" [ rel "stylesheet", href path ] []
+
+-- AUDIO
+
+audio : AudioData -> Model -> Audio
+audio _ model =
+  Audio.silence
