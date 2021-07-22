@@ -7,7 +7,7 @@ import Dict exposing (Dict)
 import Dict
 import Browser
 import Html exposing (Html, img, text, div, small, p, h5, node)
-import Html.Attributes exposing (href, class, src, style, rel, href)
+import Html.Attributes exposing (href, class, src, style, rel, href, width, height, alt)
 import Http
 import Json.Encode
 import Json.Decode exposing (Decoder, list, field, map, map2, map3, map5, maybe, nullable, string, succeed)
@@ -260,14 +260,19 @@ viewStation currentTime station =
       classes = if station.fresh then "radio-station fresh" else "radio-station"
   in
   ListGroup.anchor
-      [ ListGroup.attrs [ href "#", Flex.col, Flex.alignItemsStart, class classes ] ]
-      [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
-          [ h5 [ Spacing.m1, class "station-name" ]
-              [ text station.name
+      [ ListGroup.attrs [ href "#", Flex.block, Flex.row, Flex.alignItemsStart, class classes ] ]
+      [
+         img [ Spacing.m1, src (Maybe.withDefault "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" (Maybe.andThen .coverArtUrl station.nowPlaying)), style "width" "50px", style "height" "50px", alt ""] []
+        , div [ Size.w100 ]
+          [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
+              [ h5 [ Spacing.m1, class "station-name" ]
+                  [ text station.name
+                  ]
+              , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
               ]
-          , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
+          , p [ Spacing.mb1, class "now-playing" ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
           ]
-      , p [ Spacing.mb1, class "now-playing" ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
+
       ]
 
 viewNowPlayingInfo : NowPlayingInfo -> String
