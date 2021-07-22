@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.em,
-		impl.eF,
-		impl.ex,
+		impl.en,
+		impl.eG,
+		impl.ey,
 		function() { return function() {} }
 	);
 });
@@ -3928,11 +3928,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.em,
-		impl.eF,
-		impl.ex,
+		impl.en,
+		impl.eG,
+		impl.ey,
 		function(sendToApp, initialModel) {
-			var view = impl.eG;
+			var view = impl.eH;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.em,
-		impl.eF,
-		impl.ex,
+		impl.en,
+		impl.eG,
+		impl.ey,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.cJ && impl.cJ(sendToApp)
-			var view = impl.eG;
+			var view = impl.eH;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		em: function(flags)
+		en: function(flags)
 		{
-			return A3(impl.em, flags, _Browser_getUrl(), key);
+			return A3(impl.en, flags, _Browser_getUrl(), key);
 		},
+		eH: impl.eH,
 		eG: impl.eG,
-		eF: impl.eF,
-		ex: impl.ex
+		ey: impl.ey
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { ej: 'hidden', ea: 'visibilitychange' }
+		? { ek: 'hidden', ea: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { ej: 'mozHidden', ea: 'mozvisibilitychange' }
+		? { ek: 'mozHidden', ea: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { ej: 'msHidden', ea: 'msvisibilitychange' }
+		? { ek: 'msHidden', ea: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { ej: 'webkitHidden', ea: 'webkitvisibilitychange' }
-		: { ej: 'hidden', ea: 'visibilitychange' };
+		? { ek: 'webkitHidden', ea: 'webkitvisibilitychange' }
+		: { ek: 'hidden', ea: 'visibilitychange' };
 }
 
 
@@ -4316,7 +4316,7 @@ function _Browser_getElement(id)
 				d1: _Browser_doc.documentElement.clientWidth,
 				db: _Browser_doc.documentElement.clientHeight
 			},
-			ee: {
+			ef: {
 				d2: x + rect.left,
 				d3: y + rect.top,
 				d1: rect.width,
@@ -4375,7 +4375,7 @@ var _Http_toTask = F3(function(router, toTask, request)
 		$elm$core$Maybe$isJust(request.dX) && _Http_track(router, xhr, request.dX.a);
 
 		try {
-			xhr.open(request.eo, request.d_, true);
+			xhr.open(request.ep, request.d_, true);
 		} catch (e) {
 			return done($elm$http$Http$BadUrl_(request.d_));
 		}
@@ -4398,7 +4398,7 @@ function _Http_configureRequest(xhr, request)
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.ey.a || 0;
+	xhr.timeout = request.ez.a || 0;
 	xhr.responseType = request.c8.d;
 	xhr.withCredentials = request.d6;
 }
@@ -4422,8 +4422,8 @@ function _Http_toMetadata(xhr)
 {
 	return {
 		d_: xhr.responseURL,
-		eu: xhr.status,
-		ev: xhr.statusText,
+		ev: xhr.status,
+		ew: xhr.statusText,
 		da: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
@@ -4519,14 +4519,14 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			es: event.loaded,
+			et: event.loaded,
 			dN: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			eq: event.loaded,
+			er: event.loaded,
 			dN: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
@@ -6823,10 +6823,10 @@ var $MartinSStewart$elm_audio$Audio$subscriptions = F2(
 					$elm$core$Platform$Sub$map,
 					$MartinSStewart$elm_audio$Audio$UserMsg,
 					A2(
-						app.ex,
+						app.ey,
 						$MartinSStewart$elm_audio$Audio$audioData(model),
 						model.F)),
-					app.d9.eh($MartinSStewart$elm_audio$Audio$fromJSPortSub)
+					app.d9.ei($MartinSStewart$elm_audio$Audio$fromJSPortSub)
 				]));
 	});
 var $MartinSStewart$elm_audio$Audio$File = $elm$core$Basics$identity;
@@ -6925,9 +6925,9 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 			var userMsg = msg.a;
 			return A4(
 				$MartinSStewart$elm_audio$Audio$updateHelper,
-				app.d9.eA,
+				app.d9.eB,
 				app.d8,
-				A2($MartinSStewart$elm_audio$Audio$flip, app.eF, userMsg),
+				A2($MartinSStewart$elm_audio$Audio$flip, app.eG, userMsg),
 				model);
 		} else {
 			var response = msg.a;
@@ -6958,9 +6958,9 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 							var userMsg = _v5.b;
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eA,
+								app.d9.eB,
 								app.d8,
-								A2($MartinSStewart$elm_audio$Audio$flip, app.eF, userMsg),
+								A2($MartinSStewart$elm_audio$Audio$flip, app.eG, userMsg),
 								_Utils_update(
 									model,
 									{
@@ -6970,11 +6970,11 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 						} else {
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eA,
+								app.d9.eB,
 								app.d8,
 								A2(
 									$MartinSStewart$elm_audio$Audio$flip,
-									app.eF,
+									app.eG,
 									$mgold$elm_nonempty_list$List$Nonempty$head(pendingRequest.G).b),
 								_Utils_update(
 									model,
@@ -7005,9 +7005,9 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 							var userMsg = _v8.b;
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eA,
+								app.d9.eB,
 								app.d8,
-								A2($MartinSStewart$elm_audio$Audio$flip, app.eF, userMsg),
+								A2($MartinSStewart$elm_audio$Audio$flip, app.eG, userMsg),
 								_Utils_update(
 									model,
 									{
@@ -7016,11 +7016,11 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 						} else {
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eA,
+								app.d9.eB,
 								app.d8,
 								A2(
 									$MartinSStewart$elm_audio$Audio$flip,
-									app.eF,
+									app.eG,
 									$mgold$elm_nonempty_list$List$Nonempty$head(pendingRequest.G).b),
 								_Utils_update(
 									model,
@@ -7082,18 +7082,18 @@ var $MartinSStewart$elm_audio$Audio$elementWithAudio = A2(
 	function (app) {
 		return $elm$browser$Browser$element(
 			{
-				em: A2(
+				en: A2(
 					$elm$core$Basics$composeR,
-					app.em,
-					A2($MartinSStewart$elm_audio$Audio$initHelper, app.d9.eA, app.d8)),
-				ex: $MartinSStewart$elm_audio$Audio$subscriptions(app),
-				eF: $MartinSStewart$elm_audio$Audio$update(app),
-				eG: function (model) {
+					app.en,
+					A2($MartinSStewart$elm_audio$Audio$initHelper, app.d9.eB, app.d8)),
+				ey: $MartinSStewart$elm_audio$Audio$subscriptions(app),
+				eG: $MartinSStewart$elm_audio$Audio$update(app),
+				eH: function (model) {
 					return A2(
 						$elm$html$Html$map,
 						$MartinSStewart$elm_audio$Audio$UserMsg,
 						A2(
-							app.eG,
+							app.eH,
 							$MartinSStewart$elm_audio$Audio$audioData(model),
 							$MartinSStewart$elm_audio$Audio$getUserModel(model)));
 				}
@@ -7195,7 +7195,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.eu));
+					$elm$http$Http$BadStatus(metadata.ev));
 			default:
 				var body = response.b;
 				return A2(
@@ -7340,8 +7340,8 @@ var $elm$http$Http$cmdMap = F2(
 					_: r._,
 					c8: A2(_Http_mapExpect, func, r.c8),
 					da: r.da,
-					eo: r.eo,
-					ey: r.ey,
+					ep: r.ep,
+					ez: r.ez,
 					dX: r.dX,
 					d_: r.d_
 				});
@@ -7366,37 +7366,34 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{d6: false, _: r._, c8: r.c8, da: r.da, eo: r.eo, ey: r.ey, dX: r.dX, d_: r.d_}));
+			{d6: false, _: r._, c8: r.c8, da: r.da, ep: r.ep, ez: r.ez, dX: r.dX, d_: r.d_}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{_: $elm$http$Http$emptyBody, c8: r.c8, da: _List_Nil, eo: 'GET', ey: $elm$core$Maybe$Nothing, dX: $elm$core$Maybe$Nothing, d_: r.d_});
+		{_: $elm$http$Http$emptyBody, c8: r.c8, da: _List_Nil, ep: 'GET', ez: $elm$core$Maybe$Nothing, dX: $elm$core$Maybe$Nothing, d_: r.d_});
 };
 var $elm$json$Json$Decode$list = _Json_decodeList;
 var $author$project$Main$CurrentlyLoading = {$: 0};
 var $author$project$Main$StationInfo = F5(
 	function (name, favicon, nowPlaying, loadingState, fresh) {
-		return {eg: favicon, au: fresh, aD: loadingState, dr: name, aG: nowPlaying};
+		return {eh: favicon, au: fresh, aD: loadingState, dr: name, aG: nowPlaying};
 	});
 var $elm$json$Json$Decode$map5 = _Json_map5;
-var $elm$json$Json$Decode$null = _Json_decodeNull;
 var $elm$json$Json$Decode$oneOf = _Json_oneOf;
-var $elm$json$Json$Decode$nullable = function (decoder) {
+var $elm$json$Json$Decode$maybe = function (decoder) {
 	return $elm$json$Json$Decode$oneOf(
 		_List_fromArray(
 			[
-				$elm$json$Json$Decode$null($elm$core$Maybe$Nothing),
-				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, decoder)
+				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, decoder),
+				$elm$json$Json$Decode$succeed($elm$core$Maybe$Nothing)
 			]));
 };
 var $author$project$Main$stationInfoDecoder = A6(
 	$elm$json$Json$Decode$map5,
 	$author$project$Main$StationInfo,
 	A2($elm$json$Json$Decode$field, 'name', $elm$json$Json$Decode$string),
-	A2(
-		$elm$json$Json$Decode$field,
-		'favicon',
-		$elm$json$Json$Decode$nullable($elm$json$Json$Decode$string)),
+	$elm$json$Json$Decode$maybe(
+		A2($elm$json$Json$Decode$field, 'favicon', $elm$json$Json$Decode$string)),
 	$elm$json$Json$Decode$succeed($elm$core$Maybe$Nothing),
 	$elm$json$Json$Decode$succeed($author$project$Main$CurrentlyLoading),
 	$elm$json$Json$Decode$succeed(false));
@@ -7799,9 +7796,9 @@ var $author$project$Main$GotNowPlayingInfo = F3(
 	function (a, b, c) {
 		return {$: 0, a: a, b: b, c: c};
 	});
-var $author$project$Main$NowPlayingInfo = F2(
-	function (title, itemType) {
-		return {cx: itemType, dS: title};
+var $author$project$Main$NowPlayingInfo = F3(
+	function (title, itemType, coverArtUrl) {
+		return {ed: coverArtUrl, cx: itemType, dS: title};
 	});
 var $elm$core$List$head = function (list) {
 	if (list.b) {
@@ -7819,11 +7816,13 @@ var $author$project$Main$nowPlayingDecoder = A2(
 		$elm$json$Json$Decode$field,
 		'items',
 		$elm$json$Json$Decode$list(
-			A3(
-				$elm$json$Json$Decode$map2,
+			A4(
+				$elm$json$Json$Decode$map3,
 				$author$project$Main$NowPlayingInfo,
 				A2($elm$json$Json$Decode$field, 'text', $elm$json$Json$Decode$string),
-				A2($elm$json$Json$Decode$field, 'type', $elm$json$Json$Decode$string)))));
+				A2($elm$json$Json$Decode$field, 'type', $elm$json$Json$Decode$string),
+				$elm$json$Json$Decode$maybe(
+					A2($elm$json$Json$Decode$field, 'cover_art', $elm$json$Json$Decode$string))))));
 var $author$project$Main$getNowPlaying = F2(
 	function (stationId, time) {
 		return $elm$http$Http$get(
@@ -9457,11 +9456,11 @@ var $author$project$Main$view = F2(
 var $author$project$Main$main = $MartinSStewart$elm_audio$Audio$elementWithAudio(
 	{
 		d8: $author$project$Main$audio,
-		d9: {eh: $author$project$Main$audioPortFromJS, eA: $author$project$Main$audioPortToJS},
-		em: $author$project$Main$init,
-		ex: $author$project$Main$subscriptions,
-		eF: $author$project$Main$update,
-		eG: $author$project$Main$view
+		d9: {ei: $author$project$Main$audioPortFromJS, eB: $author$project$Main$audioPortToJS},
+		en: $author$project$Main$init,
+		ey: $author$project$Main$subscriptions,
+		eG: $author$project$Main$update,
+		eH: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
