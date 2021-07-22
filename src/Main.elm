@@ -10,8 +10,10 @@ import Html exposing (Html, img, text, div, small, p, h5, node)
 import Html.Attributes exposing (href, class, src, style, rel, href, width, height, alt)
 import Http
 import Json.Encode
-import Json.Decode exposing (Decoder, list, field, map, map2, map3, map5, maybe, nullable, string, succeed)
+import Json.Decode exposing (Decoder, list, field, map, map2, map3, map5, map6, maybe, nullable, string, succeed)
+import Maybe exposing (withDefault)
 import Maybe.Extra
+import Maybe.Extra exposing (orElse)
 import Process
 import Random
 import Task
@@ -74,7 +76,7 @@ type Stations
   | Success (StationDict)
 
 type alias StationId = String
-type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe NowPlayingInfo, loadingState: LoadingState, fresh: Bool }
+type alias StationInfo = {name: String, favicon: Maybe String, logoUrl: Maybe String, nowPlaying: Maybe NowPlayingInfo, loadingState: LoadingState, fresh: Bool }
 type LoadingState
   = CurrentlyLoading
   | LoadedAt Time.Posix
@@ -125,9 +127,10 @@ stationListItemDecoder =
 
 stationInfoDecoder : Decoder StationInfo
 stationInfoDecoder =
-  map5 StationInfo
+  map6 StationInfo
     (field "name" string)
     (maybe (field "favicon" string))
+    (maybe (field "logo_url" string))
     (succeed Nothing)
     (succeed CurrentlyLoading)
     (succeed False)
@@ -259,11 +262,16 @@ viewStation currentTime station =
           LoadedAt time -> text (relativeTime effectiveTime time)
       classes = if station.fresh then "radio-station fresh" else "radio-station"
       emptyImageData = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-      coverImage = img [ Spacing.m1, src (Maybe.withDefault emptyImageData (Maybe.andThen .coverArtUrl station.nowPlaying)), style "width" "50px", style "height" "50px", alt ""] []
+      imgSource =
+        station.nowPlaying
+          |> Maybe.andThen .coverArtUrl
+          |> orElse station.logoUrl
+          |> withDefault emptyImageData
+      coverImageElt = img [ Spacing.m1, src imgSource, style "width" "50px", style "height" "50px", alt ""] []
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href "#", Flex.block, Flex.row, Flex.alignItemsStart, class classes ] ]
-      [ coverImage
+      [ coverImageElt
       , div [ Size.w100, Spacing.ml3 ]
         [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
             [ h5 [ Spacing.m1, class "station-name" ]
