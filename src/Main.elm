@@ -10,7 +10,7 @@ import Html exposing (Html, img, text, div, small, p, h5, node)
 import Html.Attributes exposing (href, class, src, style, rel, href)
 import Http
 import Json.Encode
-import Json.Decode exposing (Decoder, list, field, map, map2, map3, map5, nullable, string, succeed)
+import Json.Decode exposing (Decoder, list, field, map, map2, map3, map5, maybe, nullable, string, succeed)
 import Maybe.Extra
 import Process
 import Random
@@ -78,7 +78,7 @@ type alias StationInfo = {name: String, favicon: Maybe String, nowPlaying: Maybe
 type LoadingState
   = CurrentlyLoading
   | LoadedAt Time.Posix
-type alias NowPlayingInfo = {title: String, itemType: String}
+type alias NowPlayingInfo = {title: String, itemType: String, coverArtUrl: Maybe String}
 type alias StationDict = Dict StationId StationInfo
 
 init : () -> (Model, Cmd Msg, Audio.AudioCmd Msg)
@@ -106,9 +106,10 @@ nowPlayingDecoder : Decoder (Maybe NowPlayingInfo)
 nowPlayingDecoder =
   field "items" (
     list (
-      map2 NowPlayingInfo
+      map3 NowPlayingInfo
         (field "text" string)
         (field "type" string)
+        (maybe (field "cover_art" string))
     )
   ) |> map List.head
 
@@ -126,7 +127,7 @@ stationInfoDecoder : Decoder StationInfo
 stationInfoDecoder =
   map5 StationInfo
     (field "name" string)
-    (field "favicon" (nullable string))
+    (maybe (field "favicon" string))
     (succeed Nothing)
     (succeed CurrentlyLoading)
     (succeed False)
