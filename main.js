@@ -9084,6 +9084,7 @@ var $elm$html$Html$img = _VirtualDom_node('img');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$justifyBetween = $elm$html$Html$Attributes$class('justify-content-between');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1 = $elm$html$Html$Attributes$class('m-1');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1 = $elm$html$Html$Attributes$class('mb-1');
+var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml3 = $elm$html$Html$Attributes$class('ml-3');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $ryannhg$date_format$DateFormat$Relative$defaultInSomeDays = function (days) {
 	return (days < 2) ? 'tomorrow' : ('in ' + ($elm$core$String$fromInt(days) + ' days'));
@@ -9358,6 +9359,7 @@ var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100 = $elm$html$Html$Attributes$class('w-100');
 var $author$project$Main$viewStation = F2(
 	function (currentTime, station) {
+		var emptyImageData = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 		var effectiveTime = $elm$time$Time$millisToPosix(
 			1000 + $elm$time$Time$posixToMillis(currentTime));
 		var loadedWhenInfo = function () {
@@ -9374,6 +9376,26 @@ var $author$project$Main$viewStation = F2(
 					A2($ryannhg$date_format$DateFormat$Relative$relativeTime, effectiveTime, time));
 			}
 		}();
+		var coverImage = A2(
+			$elm$html$Html$img,
+			_List_fromArray(
+				[
+					$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
+					$elm$html$Html$Attributes$src(
+					A2(
+						$elm$core$Maybe$withDefault,
+						emptyImageData,
+						A2(
+							$elm$core$Maybe$andThen,
+							function ($) {
+								return $.c1;
+							},
+							station.ah))),
+					A2($elm$html$Html$Attributes$style, 'width', '50px'),
+					A2($elm$html$Html$Attributes$style, 'height', '50px'),
+					$elm$html$Html$Attributes$alt('')
+				]),
+			_List_Nil);
 		var classes = station.av ? 'radio-station fresh' : 'radio-station';
 		return A2(
 			$rundis$elm_bootstrap$Bootstrap$ListGroup$anchor,
@@ -9391,30 +9413,11 @@ var $author$project$Main$viewStation = F2(
 				]),
 			_List_fromArray(
 				[
-					A2(
-					$elm$html$Html$img,
-					_List_fromArray(
-						[
-							$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
-							$elm$html$Html$Attributes$src(
-							A2(
-								$elm$core$Maybe$withDefault,
-								'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-								A2(
-									$elm$core$Maybe$andThen,
-									function ($) {
-										return $.c1;
-									},
-									station.ah))),
-							A2($elm$html$Html$Attributes$style, 'width', '50px'),
-							A2($elm$html$Html$Attributes$style, 'height', '50px'),
-							$elm$html$Html$Attributes$alt('')
-						]),
-					_List_Nil),
+					coverImage,
 					A2(
 					$elm$html$Html$div,
 					_List_fromArray(
-						[$rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100]),
+						[$rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100, $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml3]),
 					_List_fromArray(
 						[
 							A2(
