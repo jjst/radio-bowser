@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.cQ.aC === region.c6.aC)
+	if (region.cQ.aD === region.c7.aD)
 	{
-		return 'on line ' + region.cQ.aC;
+		return 'on line ' + region.cQ.aD;
 	}
-	return 'on lines ' + region.cQ.aC + ' through ' + region.c6.aC;
+	return 'on lines ' + region.cQ.aD + ' through ' + region.c7.aD;
 }
 
 
@@ -3982,7 +3982,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.dS) && (_VirtualDom_doc.title = title = doc.dS);
+				(title !== doc.dT) && (_VirtualDom_doc.title = title = doc.dT);
 			});
 		}
 	);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.dA === next.dA
-							&& curr.dc === next.dc
-							&& curr.dw.a === next.dw.a
+							&& curr.dB === next.dB
+							&& curr.dd === next.dd
+							&& curr.dx.a === next.dx.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { ek: 'hidden', ea: 'visibilitychange' }
+		? { ek: 'hidden', eb: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { ek: 'mozHidden', ea: 'mozvisibilitychange' }
+		? { ek: 'mozHidden', eb: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { ek: 'msHidden', ea: 'msvisibilitychange' }
+		? { ek: 'msHidden', eb: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { ek: 'webkitHidden', ea: 'webkitvisibilitychange' }
-		: { ek: 'hidden', ea: 'visibilitychange' };
+		? { ek: 'webkitHidden', eb: 'webkitvisibilitychange' }
+		: { ek: 'hidden', eb: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		dI: _Browser_getScene(),
-		d$: {
-			d2: _Browser_window.pageXOffset,
-			d3: _Browser_window.pageYOffset,
-			d1: _Browser_doc.documentElement.clientWidth,
-			db: _Browser_doc.documentElement.clientHeight
+		dJ: _Browser_getScene(),
+		d0: {
+			d3: _Browser_window.pageXOffset,
+			d4: _Browser_window.pageYOffset,
+			d2: _Browser_doc.documentElement.clientWidth,
+			dc: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		d1: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		db: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		d2: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		dc: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			dI: {
-				d1: node.scrollWidth,
-				db: node.scrollHeight
+			dJ: {
+				d2: node.scrollWidth,
+				dc: node.scrollHeight
 			},
-			d$: {
-				d2: node.scrollLeft,
-				d3: node.scrollTop,
-				d1: node.clientWidth,
-				db: node.clientHeight
+			d0: {
+				d3: node.scrollLeft,
+				d4: node.scrollTop,
+				d2: node.clientWidth,
+				dc: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			dI: _Browser_getScene(),
-			d$: {
-				d2: x,
-				d3: y,
-				d1: _Browser_doc.documentElement.clientWidth,
-				db: _Browser_doc.documentElement.clientHeight
+			dJ: _Browser_getScene(),
+			d0: {
+				d3: x,
+				d4: y,
+				d2: _Browser_doc.documentElement.clientWidth,
+				dc: _Browser_doc.documentElement.clientHeight
 			},
 			ef: {
-				d2: x + rect.left,
-				d3: y + rect.top,
-				d1: rect.width,
-				db: rect.height
+				d3: x + rect.left,
+				d4: y + rect.top,
+				d2: rect.width,
+				dc: rect.height
 			}
 		};
 	});
@@ -4365,19 +4365,19 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.c8.a(response)));
+			callback(toTask(request.c9.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.c8.b, xhr)); });
-		$elm$core$Maybe$isJust(request.dX) && _Http_track(router, xhr, request.dX.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.c9.b, xhr)); });
+		$elm$core$Maybe$isJust(request.dY) && _Http_track(router, xhr, request.dY.a);
 
 		try {
-			xhr.open(request.ep, request.d_, true);
+			xhr.open(request.ep, request.d$, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.d_));
+			return done($elm$http$Http$BadUrl_(request.d$));
 		}
 
 		_Http_configureRequest(xhr, request);
@@ -4394,13 +4394,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.da; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.db; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 	xhr.timeout = request.ez.a || 0;
-	xhr.responseType = request.c8.d;
-	xhr.withCredentials = request.d6;
+	xhr.responseType = request.c9.d;
+	xhr.withCredentials = request.d7;
 }
 
 
@@ -4421,10 +4421,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		d_: xhr.responseURL,
+		d$: xhr.responseURL,
 		ev: xhr.status,
 		ew: xhr.statusText,
-		da: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		db: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4520,14 +4520,14 @@ function _Http_track(router, xhr, tracker)
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
 			et: event.loaded,
-			dN: event.total
+			dO: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
 			er: event.loaded,
-			dN: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			dO: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
 }
@@ -5144,7 +5144,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {c9: fragment, dc: host, du: path, dw: port_, dA: protocol, dB: query};
+		return {da: fragment, dd: host, dv: path, dx: port_, dB: protocol, dC: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5431,7 +5431,7 @@ var $MartinSStewart$elm_audio$Audio$Model = $elm$core$Basics$identity;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $MartinSStewart$elm_audio$Audio$audioSourceBufferId = function (_v0) {
 	var audioSource = _v0;
-	return audioSource.ap;
+	return audioSource.aq;
 };
 var $ianmackenzie$elm_units$Duration$inSeconds = function (_v0) {
 	var numSeconds = _v0;
@@ -5454,7 +5454,7 @@ var $ianmackenzie$elm_units$Duration$addTo = F2(
 				$ianmackenzie$elm_units$Duration$inMilliseconds(duration)));
 	});
 var $MartinSStewart$elm_audio$Audio$audioStartTime = function (audio_) {
-	return A2($ianmackenzie$elm_units$Duration$addTo, audio_.aJ, audio_.ah);
+	return A2($ianmackenzie$elm_units$Duration$addTo, audio_.aJ, audio_.ai);
 };
 var $elm$json$Json$Encode$int = _Json_wrap;
 var $MartinSStewart$elm_audio$Audio$encodeBufferId = function (_v0) {
@@ -5485,10 +5485,10 @@ var $MartinSStewart$elm_audio$Audio$encodeLoopConfig = function (maybeLoop) {
 				[
 					_Utils_Tuple2(
 					'loopStart',
-					$MartinSStewart$elm_audio$Audio$encodeDuration(loop.dn)),
+					$MartinSStewart$elm_audio$Audio$encodeDuration(loop.$7)),
 					_Utils_Tuple2(
 					'loopEnd',
-					$MartinSStewart$elm_audio$Audio$encodeDuration(loop.dm))
+					$MartinSStewart$elm_audio$Audio$encodeDuration(loop.dn))
 				]));
 	} else {
 		return $elm$json$Json$Encode$null;
@@ -5556,7 +5556,7 @@ var $MartinSStewart$elm_audio$Audio$volumeTimelines = function (audio_) {
 		$mgold$elm_nonempty_list$List$Nonempty$map(
 			$elm$core$Tuple$mapFirst(
 				function (a) {
-					return A2($ianmackenzie$elm_units$Duration$addTo, a, audio_.ah);
+					return A2($ianmackenzie$elm_units$Duration$addTo, a, audio_.ai);
 				})),
 		audio_.aP);
 };
@@ -5584,7 +5584,7 @@ var $MartinSStewart$elm_audio$Audio$encodeStartSound = F2(
 					$MartinSStewart$elm_audio$Audio$encodeDuration(audio_.C)),
 					_Utils_Tuple2(
 					'volume',
-					$elm$json$Json$Encode$float(audio_.al)),
+					$elm$json$Json$Encode$float(audio_.am)),
 					_Utils_Tuple2(
 					'volumeTimelines',
 					A2(
@@ -5627,10 +5627,10 @@ var $MartinSStewart$elm_audio$Audio$flattenAudio = function (audio_) {
 		case 1:
 			var source = audio_.a.S;
 			var startTime = audio_.a.aJ;
-			var settings = audio_.a.dL;
+			var settings = audio_.a.dM;
 			return _List_fromArray(
 				[
-					{M: settings.M, ah: $ianmackenzie$elm_units$Quantity$zero, O: settings.O, S: source, C: settings.C, aJ: startTime, al: 1, aP: _List_Nil}
+					{M: settings.M, ai: $ianmackenzie$elm_units$Quantity$zero, O: settings.O, S: source, C: settings.C, aJ: startTime, am: 1, aP: _List_Nil}
 				]);
 		default:
 			var effect = audio_.a;
@@ -5643,11 +5643,11 @@ var $MartinSStewart$elm_audio$Audio$flattenAudio = function (audio_) {
 						function (a) {
 							return _Utils_update(
 								a,
-								{al: scaleVolume_.dH * a.al});
+								{am: scaleVolume_.dI * a.am});
 						},
-						$MartinSStewart$elm_audio$Audio$flattenAudio(effect.d8));
+						$MartinSStewart$elm_audio$Audio$flattenAudio(effect.d9));
 				case 1:
-					var volumeAt = _v1.a.d0;
+					var volumeAt = _v1.a.d1;
 					return A2(
 						$elm$core$List$map,
 						function (a) {
@@ -5657,7 +5657,7 @@ var $MartinSStewart$elm_audio$Audio$flattenAudio = function (audio_) {
 									aP: A2($elm$core$List$cons, volumeAt, a.aP)
 								});
 						},
-						$MartinSStewart$elm_audio$Audio$flattenAudio(effect.d8));
+						$MartinSStewart$elm_audio$Audio$flattenAudio(effect.d9));
 				default:
 					var duration = _v1.a;
 					return A2(
@@ -5666,10 +5666,10 @@ var $MartinSStewart$elm_audio$Audio$flattenAudio = function (audio_) {
 							return _Utils_update(
 								a,
 								{
-									ah: A2($ianmackenzie$elm_units$Quantity$plus, duration, a.ah)
+									ai: A2($ianmackenzie$elm_units$Quantity$plus, duration, a.ai)
 								});
 						},
-						$MartinSStewart$elm_audio$Audio$flattenAudio(effect.d8));
+						$MartinSStewart$elm_audio$Audio$flattenAudio(effect.d9));
 			}
 	}
 };
@@ -6500,7 +6500,7 @@ var $MartinSStewart$elm_audio$Audio$updateAudioState = F2(
 							A2(
 							encodeValue,
 							function ($) {
-								return $.al;
+								return $.am;
 							},
 							$MartinSStewart$elm_audio$Audio$encodeSetVolume),
 							A2(
@@ -6575,7 +6575,7 @@ var $MartinSStewart$elm_audio$Audio$encodeAudioLoadRequest = F2(
 				[
 					_Utils_Tuple2(
 					'audioUrl',
-					$elm$json$Json$Encode$string(audioLoad.an)),
+					$elm$json$Json$Encode$string(audioLoad.ao)),
 					_Utils_Tuple2(
 					'requestId',
 					$elm$json$Json$Encode$int(index))
@@ -6761,7 +6761,7 @@ var $MartinSStewart$elm_audio$Audio$decodeFromJSMsg = A2(
 					F2(
 						function (requestId, error) {
 							return $MartinSStewart$elm_audio$Audio$AudioLoadFailed(
-								{at: error, b$: requestId});
+								{au: error, b$: requestId});
 						}),
 					A2($elm$json$Json$Decode$field, 'requestId', $elm$json$Json$Decode$int),
 					A2($elm$json$Json$Decode$field, 'error', $MartinSStewart$elm_audio$Audio$decodeLoadError));
@@ -6772,8 +6772,8 @@ var $MartinSStewart$elm_audio$Audio$decodeFromJSMsg = A2(
 						function (requestId, bufferId, duration) {
 							return $MartinSStewart$elm_audio$Audio$AudioLoadSuccess(
 								{
-									ap: bufferId,
-									as: $ianmackenzie$elm_units$Duration$seconds(duration),
+									aq: bufferId,
+									at: $ianmackenzie$elm_units$Duration$seconds(duration),
 									b$: requestId
 								});
 						}),
@@ -6792,7 +6792,7 @@ var $MartinSStewart$elm_audio$Audio$decodeFromJSMsg = A2(
 				return $elm$json$Json$Decode$succeed(
 					$MartinSStewart$elm_audio$Audio$JsonParseError(
 						{
-							at: 'Type ' + ($elm$core$String$fromInt(value) + ' not handled.')
+							au: 'Type ' + ($elm$core$String$fromInt(value) + ' not handled.')
 						}));
 		}
 	},
@@ -6808,7 +6808,7 @@ var $MartinSStewart$elm_audio$Audio$fromJSPortSub = function (json) {
 		return $MartinSStewart$elm_audio$Audio$FromJSMsg(
 			$MartinSStewart$elm_audio$Audio$JsonParseError(
 				{
-					at: $elm$json$Json$Decode$errorToString(error)
+					au: $elm$json$Json$Decode$errorToString(error)
 				}));
 	}
 };
@@ -6826,7 +6826,7 @@ var $MartinSStewart$elm_audio$Audio$subscriptions = F2(
 						app.ey,
 						$MartinSStewart$elm_audio$Audio$audioData(model),
 						model.F)),
-					app.d9.ei($MartinSStewart$elm_audio$Audio$fromJSPortSub)
+					app.ea.ei($MartinSStewart$elm_audio$Audio$fromJSPortSub)
 				]));
 	});
 var $MartinSStewart$elm_audio$Audio$File = $elm$core$Basics$identity;
@@ -6925,8 +6925,8 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 			var userMsg = msg.a;
 			return A4(
 				$MartinSStewart$elm_audio$Audio$updateHelper,
-				app.d9.eB,
-				app.d8,
+				app.ea.eB,
+				app.d9,
 				A2($MartinSStewart$elm_audio$Audio$flip, app.eG, userMsg),
 				model);
 		} else {
@@ -6934,18 +6934,18 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 			switch (response.$) {
 				case 0:
 					var requestId = response.a.b$;
-					var bufferId = response.a.ap;
-					var duration = response.a.as;
+					var bufferId = response.a.aq;
+					var duration = response.a.at;
 					var _v3 = A2($elm$core$Dict$get, requestId, model.e);
 					if (!_v3.$) {
 						var pendingRequest = _v3.a;
 						var sourceData = A3(
 							$elm$core$Dict$insert,
 							$MartinSStewart$elm_audio$Audio$rawBufferId(bufferId),
-							{as: duration},
+							{at: duration},
 							model.o);
 						var source = $elm$core$Result$Ok(
-							{ap: bufferId});
+							{aq: bufferId});
 						var maybeUserMsg = A2(
 							$MartinSStewart$elm_audio$Audio$find,
 							A2(
@@ -6958,8 +6958,8 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 							var userMsg = _v5.b;
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eB,
-								app.d8,
+								app.ea.eB,
+								app.d9,
 								A2($MartinSStewart$elm_audio$Audio$flip, app.eG, userMsg),
 								_Utils_update(
 									model,
@@ -6970,8 +6970,8 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 						} else {
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eB,
-								app.d8,
+								app.ea.eB,
+								app.d9,
 								A2(
 									$MartinSStewart$elm_audio$Audio$flip,
 									app.eG,
@@ -6988,7 +6988,7 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 					}
 				case 1:
 					var requestId = response.a.b$;
-					var error = response.a.at;
+					var error = response.a.au;
 					var _v6 = A2($elm$core$Dict$get, requestId, model.e);
 					if (!_v6.$) {
 						var pendingRequest = _v6.a;
@@ -7005,8 +7005,8 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 							var userMsg = _v8.b;
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eB,
-								app.d8,
+								app.ea.eB,
+								app.d9,
 								A2($MartinSStewart$elm_audio$Audio$flip, app.eG, userMsg),
 								_Utils_update(
 									model,
@@ -7016,8 +7016,8 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 						} else {
 							return A4(
 								$MartinSStewart$elm_audio$Audio$updateHelper,
-								app.d9.eB,
-								app.d8,
+								app.ea.eB,
+								app.d9,
 								A2(
 									$MartinSStewart$elm_audio$Audio$flip,
 									app.eG,
@@ -7041,7 +7041,7 @@ var $MartinSStewart$elm_audio$Audio$update = F3(
 							}),
 						$elm$core$Platform$Cmd$none);
 				default:
-					var error = response.a.at;
+					var error = response.a.au;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			}
 		}
@@ -7059,7 +7059,7 @@ var $MartinSStewart$elm_audio$Audio$offsetBy = F2(
 	function (offset_, audio_) {
 		return $MartinSStewart$elm_audio$Audio$Effect(
 			{
-				d8: audio_,
+				d9: audio_,
 				bi: $MartinSStewart$elm_audio$Audio$Offset(offset_)
 			});
 	});
@@ -7067,12 +7067,12 @@ var $MartinSStewart$elm_audio$Audio$withAudioOffset = function (app) {
 	return _Utils_update(
 		app,
 		{
-			d8: F2(
+			d9: F2(
 				function (audioData_, model) {
 					return A2(
 						$MartinSStewart$elm_audio$Audio$offsetBy,
 						$ianmackenzie$elm_units$Duration$milliseconds(50),
-						A2(app.d8, audioData_, model));
+						A2(app.d9, audioData_, model));
 				})
 		});
 };
@@ -7085,7 +7085,7 @@ var $MartinSStewart$elm_audio$Audio$elementWithAudio = A2(
 				en: A2(
 					$elm$core$Basics$composeR,
 					app.en,
-					A2($MartinSStewart$elm_audio$Audio$initHelper, app.d9.eB, app.d8)),
+					A2($MartinSStewart$elm_audio$Audio$initHelper, app.ea.eB, app.d9)),
 				ey: $MartinSStewart$elm_audio$Audio$subscriptions(app),
 				eG: $MartinSStewart$elm_audio$Audio$update(app),
 				eH: function (model) {
@@ -7223,7 +7223,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {dD: reqs, dO: subs};
+		return {dE: reqs, dP: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -7267,7 +7267,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.dX;
+							var _v4 = req.dY;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -7297,7 +7297,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.dD));
+			A3($elm$http$Http$updateReqs, router, cmds, state.dE));
 	});
 var $elm$http$Http$maybeSend = F4(
 	function (router, desiredTracker, progress, _v0) {
@@ -7322,7 +7322,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.dO)));
+					state.dP)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -7336,14 +7336,14 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
-					d6: r.d6,
+					d7: r.d7,
 					_: r._,
-					c8: A2(_Http_mapExpect, func, r.c8),
-					da: r.da,
+					c9: A2(_Http_mapExpect, func, r.c9),
+					db: r.db,
 					ep: r.ep,
 					ez: r.ez,
-					dX: r.dX,
-					d_: r.d_
+					dY: r.dY,
+					d$: r.d$
 				});
 		}
 	});
@@ -7366,17 +7366,17 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{d6: false, _: r._, c8: r.c8, da: r.da, ep: r.ep, ez: r.ez, dX: r.dX, d_: r.d_}));
+			{d7: false, _: r._, c9: r.c9, db: r.db, ep: r.ep, ez: r.ez, dY: r.dY, d$: r.d$}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{_: $elm$http$Http$emptyBody, c8: r.c8, da: _List_Nil, ep: 'GET', ez: $elm$core$Maybe$Nothing, dX: $elm$core$Maybe$Nothing, d_: r.d_});
+		{_: $elm$http$Http$emptyBody, c9: r.c9, db: _List_Nil, ep: 'GET', ez: $elm$core$Maybe$Nothing, dY: $elm$core$Maybe$Nothing, d$: r.d$});
 };
 var $elm$json$Json$Decode$list = _Json_decodeList;
 var $author$project$Main$CurrentlyLoading = {$: 0};
 var $author$project$Main$StationInfo = F5(
 	function (name, favicon, nowPlaying, loadingState, fresh) {
-		return {eh: favicon, au: fresh, aD: loadingState, dr: name, aG: nowPlaying};
+		return {eh: favicon, av: fresh, aE: loadingState, ds: name, ah: nowPlaying};
 	});
 var $elm$json$Json$Decode$map5 = _Json_map5;
 var $elm$json$Json$Decode$oneOf = _Json_oneOf;
@@ -7411,8 +7411,8 @@ var $author$project$Main$stationListDecoder = A2(
 		$elm$json$Json$Decode$list($author$project$Main$stationListItemDecoder)));
 var $author$project$Main$getStationList = $elm$http$Http$get(
 	{
-		c8: A2($elm$http$Http$expectJson, $author$project$Main$GotStationList, $author$project$Main$stationListDecoder),
-		d_: $author$project$Main$baseUrl + '/stations'
+		c9: A2($elm$http$Http$expectJson, $author$project$Main$GotStationList, $author$project$Main$stationListDecoder),
+		d$: $author$project$Main$baseUrl + '/stations'
 	});
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple3(
@@ -7432,7 +7432,7 @@ var $elm$time$Time$Every = F2(
 	});
 var $elm$time$Time$State = F2(
 	function (taggers, processes) {
-		return {dz: processes, dP: taggers};
+		return {dA: processes, dQ: taggers};
 	});
 var $elm$time$Time$init = $elm$core$Task$succeed(
 	A2($elm$time$Time$State, $elm$core$Dict$empty, $elm$core$Dict$empty));
@@ -7554,7 +7554,7 @@ var $elm$time$Time$spawnHelp = F3(
 	});
 var $elm$time$Time$onEffects = F3(
 	function (router, subs, _v0) {
-		var processes = _v0.dz;
+		var processes = _v0.dA;
 		var rightStep = F3(
 			function (_v6, id, _v7) {
 				var spawns = _v7.a;
@@ -7621,7 +7621,7 @@ var $elm$time$Time$onEffects = F3(
 var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
 var $elm$time$Time$onSelfMsg = F3(
 	function (router, interval, state) {
-		var _v0 = A2($elm$core$Dict$get, interval, state.dP);
+		var _v0 = A2($elm$core$Dict$get, interval, state.dQ);
 		if (_v0.$ === 1) {
 			return $elm$core$Task$succeed(state);
 		} else {
@@ -7798,7 +7798,7 @@ var $author$project$Main$GotNowPlayingInfo = F3(
 	});
 var $author$project$Main$NowPlayingInfo = F3(
 	function (title, itemType, coverArtUrl) {
-		return {ed: coverArtUrl, cx: itemType, dS: title};
+		return {c1: coverArtUrl, cx: itemType, dT: title};
 	});
 var $elm$core$List$head = function (list) {
 	if (list.b) {
@@ -7827,11 +7827,11 @@ var $author$project$Main$getNowPlaying = F2(
 	function (stationId, time) {
 		return $elm$http$Http$get(
 			{
-				c8: A2(
+				c9: A2(
 					$elm$http$Http$expectJson,
 					A2($author$project$Main$GotNowPlayingInfo, stationId, time),
 					$author$project$Main$nowPlayingDecoder),
-				d_: $author$project$Main$baseUrl + ('/stations/' + (stationId + '/now-playing'))
+				d$: $author$project$Main$baseUrl + ('/stations/' + (stationId + '/now-playing'))
 			});
 	});
 var $author$project$Main$jitterSeconds = 4;
@@ -7903,18 +7903,18 @@ var $author$project$Main$update = F3(
 						return _Utils_update(
 							station,
 							{
-								au: !_Utils_eq(station.aG, np),
-								aD: $author$project$Main$LoadedAt(time),
-								aG: np
+								av: !_Utils_eq(station.ah, np),
+								aE: $author$project$Main$LoadedAt(time),
+								ah: np
 							});
 					} else {
 						var error = result.a;
 						return _Utils_update(
 							station,
 							{
-								au: false,
-								aD: $author$project$Main$LoadedAt(time),
-								aG: $elm$core$Maybe$Nothing
+								av: false,
+								aE: $author$project$Main$LoadedAt(time),
+								ah: $elm$core$Maybe$Nothing
 							});
 					}
 				};
@@ -7973,7 +7973,7 @@ var $author$project$Main$update = F3(
 									function (s) {
 										return _Utils_update(
 											s,
-											{au: false, aD: $author$project$Main$CurrentlyLoading});
+											{av: false, aE: $author$project$Main$CurrentlyLoading});
 									}),
 								stations));
 					} else {
@@ -8164,7 +8164,7 @@ var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$itemAttributes = function
 				options.a4)));
 };
 var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$renderCustomItem = function (_v0) {
-	var itemFn = _v0.dh;
+	var itemFn = _v0.di;
 	var options = _v0.cB;
 	var children = _v0.c$;
 	return A2(
@@ -8185,12 +8185,12 @@ var $rundis$elm_bootstrap$Bootstrap$ListGroup$custom = function (items) {
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$Col = 0;
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$Width = F2(
 	function (screenSize, columnCount) {
-		return {c0: columnCount, dJ: screenSize};
+		return {c0: columnCount, dK: screenSize};
 	});
 var $rundis$elm_bootstrap$Bootstrap$General$Internal$XS = 0;
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColAlign = F2(
 	function (align_, options) {
-		var _v0 = align_.dJ;
+		var _v0 = align_.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8226,7 +8226,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColAlign = F2(
 	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColOffset = F2(
 	function (offset_, options) {
-		var _v0 = offset_.dJ;
+		var _v0 = offset_.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8262,7 +8262,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColOffset = F2(
 	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColOrder = F2(
 	function (order_, options) {
-		var _v0 = order_.dJ;
+		var _v0 = order_.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8298,7 +8298,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColOrder = F2(
 	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColPull = F2(
 	function (pull_, options) {
-		var _v0 = pull_.dJ;
+		var _v0 = pull_.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8334,7 +8334,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColPull = F2(
 	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColPush = F2(
 	function (push_, options) {
-		var _v0 = push_.dJ;
+		var _v0 = push_.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8370,7 +8370,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColPush = F2(
 	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyColWidth = F2(
 	function (width_, options) {
-		var _v0 = width_.dJ;
+		var _v0 = width_.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8488,7 +8488,7 @@ var $rundis$elm_bootstrap$Bootstrap$General$Internal$screenSizeOption = function
 	}
 };
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$colWidthClass = function (_v0) {
-	var screenSize = _v0.dJ;
+	var screenSize = _v0.dK;
 	var columnCount = _v0.c0;
 	return $elm$html$Html$Attributes$class(
 		'col' + (A2(
@@ -8557,8 +8557,8 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$screenSizeToPartialString = fu
 	}
 };
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$offsetClass = function (_v0) {
-	var screenSize = _v0.dJ;
-	var offsetCount = _v0.dt;
+	var screenSize = _v0.dK;
+	var offsetCount = _v0.du;
 	return $elm$html$Html$Attributes$class(
 		'offset' + ($rundis$elm_bootstrap$Bootstrap$Grid$Internal$screenSizeToPartialString(screenSize) + $rundis$elm_bootstrap$Bootstrap$Grid$Internal$offsetCountOption(offsetCount)));
 };
@@ -8606,7 +8606,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$orderColOption = function (siz
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$orderToAttributes = function (orders) {
 	var order_ = function (m) {
 		if (!m.$) {
-			var screenSize = m.a.dJ;
+			var screenSize = m.a.dK;
 			var moveCount = m.a.af;
 			return $elm$core$Maybe$Just(
 				$elm$html$Html$Attributes$class(
@@ -8653,7 +8653,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$moveCountOption = function (si
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$pullsToAttributes = function (pulls) {
 	var pull_ = function (m) {
 		if (!m.$) {
-			var screenSize = m.a.dJ;
+			var screenSize = m.a.dK;
 			var moveCount = m.a.af;
 			return $elm$core$Maybe$Just(
 				$elm$html$Html$Attributes$class(
@@ -8670,7 +8670,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$pullsToAttributes = function (
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$pushesToAttributes = function (pushes) {
 	var push_ = function (m) {
 		if (!m.$) {
-			var screenSize = m.a.dJ;
+			var screenSize = m.a.dK;
 			var moveCount = m.a.af;
 			return $elm$core$Maybe$Just(
 				$elm$html$Html$Attributes$class(
@@ -8695,8 +8695,8 @@ var $rundis$elm_bootstrap$Bootstrap$Internal$Text$textAlignDirOption = function 
 	}
 };
 var $rundis$elm_bootstrap$Bootstrap$Internal$Text$textAlignClass = function (_v0) {
-	var dir = _v0.c4;
-	var size = _v0.dN;
+	var dir = _v0.c5;
+	var size = _v0.dO;
 	return $elm$html$Html$Attributes$class(
 		'text' + (A2(
 			$elm$core$Maybe$withDefault,
@@ -8721,7 +8721,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$verticalAlignOption = function
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$vAlignClass = F2(
 	function (prefix, _v0) {
 		var align = _v0.cY;
-		var screenSize = _v0.dJ;
+		var screenSize = _v0.dK;
 		return $elm$html$Html$Attributes$class(
 			_Utils_ap(
 				prefix,
@@ -8835,7 +8835,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$renderCol = function (column) {
 };
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowHAlign = F2(
 	function (align, options) {
-		var _v0 = align.dJ;
+		var _v0 = align.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8871,7 +8871,7 @@ var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowHAlign = F2(
 	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$applyRowVAlign = F2(
 	function (align_, options) {
-		var _v0 = align_.dJ;
+		var _v0 = align_.dK;
 		switch (_v0) {
 			case 0:
 				return _Utils_update(
@@ -8940,7 +8940,7 @@ var $rundis$elm_bootstrap$Bootstrap$General$Internal$horizontalAlignOption = fun
 };
 var $rundis$elm_bootstrap$Bootstrap$General$Internal$hAlignClass = function (_v0) {
 	var align = _v0.cY;
-	var screenSize = _v0.dJ;
+	var screenSize = _v0.dK;
 	return $elm$html$Html$Attributes$class(
 		'justify-content-' + (A2(
 			$elm$core$Maybe$withDefault,
@@ -9009,6 +9009,7 @@ var $elm$core$Dict$values = function (dict) {
 		dict);
 };
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$alignItemsStart = $elm$html$Html$Attributes$class('align-items-start');
+var $elm$html$Html$Attributes$alt = $elm$html$Html$Attributes$stringProperty('alt');
 var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Action = {$: 3};
 var $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Attrs = function (a) {
 	return {$: 4, a: a};
@@ -9061,16 +9062,25 @@ var $rundis$elm_bootstrap$Bootstrap$ListGroup$anchor = F2(
 				])) : options;
 		return {
 			c$: children,
-			dh: $elm$html$Html$a,
+			di: $elm$html$Html$a,
 			cB: A2($elm$core$List$cons, $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Action, updOptions)
 		};
+	});
+var $elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (!maybeValue.$) {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
 	});
 var $rundis$elm_bootstrap$Bootstrap$ListGroup$attrs = function (attrs_) {
 	return $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$Attrs(attrs_);
 };
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$block = $elm$html$Html$Attributes$class('d-flex');
-var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$col = $elm$html$Html$Attributes$class('flex-column');
 var $elm$html$Html$h5 = _VirtualDom_node('h5');
+var $elm$html$Html$img = _VirtualDom_node('img');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$justifyBetween = $elm$html$Html$Attributes$class('justify-content-between');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1 = $elm$html$Html$Attributes$class('m-1');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1 = $elm$html$Html$Attributes$class('mb-1');
@@ -9115,7 +9125,7 @@ var $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo = function (yea
 var $ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions = {cq: $ryannhg$date_format$DateFormat$Relative$defaultInSomeDays, cr: $ryannhg$date_format$DateFormat$Relative$defaultInSomeHours, cs: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMinutes, ct: $ryannhg$date_format$DateFormat$Relative$defaultInSomeMonths, cu: $ryannhg$date_format$DateFormat$Relative$defaultInSomeSeconds, cv: $ryannhg$date_format$DateFormat$Relative$defaultInSomeYears, cI: $ryannhg$date_format$DateFormat$Relative$defaultRightNow, cK: $ryannhg$date_format$DateFormat$Relative$defaultSomeDaysAgo, cL: $ryannhg$date_format$DateFormat$Relative$defaultSomeHoursAgo, cM: $ryannhg$date_format$DateFormat$Relative$defaultSomeMinutesAgo, cN: $ryannhg$date_format$DateFormat$Relative$defaultSomeMonthsAgo, cO: $ryannhg$date_format$DateFormat$Relative$defaultSomeSecondsAgo, cP: $ryannhg$date_format$DateFormat$Relative$defaultSomeYearsAgo};
 var $ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions = F6(
 	function (seconds, minutes, hours, days, months, years) {
-		return {c2: days, dd: hours, $7: minutes, dq: months, dK: seconds, d5: years};
+		return {c3: days, de: hours, dp: minutes, dr: months, dL: seconds, d6: years};
 	});
 var $elm$time$Time$flooredDiv = F2(
 	function (numerator, denominator) {
@@ -9132,7 +9142,7 @@ var $elm$time$Time$toAdjustedMinutesHelp = F3(
 				var era = eras.a;
 				var olderEras = eras.b;
 				if (_Utils_cmp(era.cQ, posixMinutes) < 0) {
-					return posixMinutes + era.ah;
+					return posixMinutes + era.ai;
 				} else {
 					var $temp$defaultOffset = defaultOffset,
 						$temp$posixMinutes = posixMinutes,
@@ -9192,10 +9202,10 @@ var $ryannhg$date_format$DateFormat$Relative$relativeTimeWithFunctions = F3(
 		var minutes = (seconds / 60) | 0;
 		var hours = (minutes / 60) | 0;
 		var days = (hours / 24) | 0;
-		return (minutes < 1) ? functions.dK(
-			A2($elm$time$Time$toSecond, zone, posix)) : ((hours < 1) ? functions.$7(
-			A2($elm$time$Time$toMinute, zone, posix)) : ((hours < 24) ? functions.dd(
-			A2($elm$time$Time$toHour, zone, posix)) : ((days < 30) ? functions.c2(days) : ((days < 365) ? functions.dq((days / 30) | 0) : functions.d5((days / 365) | 0)))));
+		return (minutes < 1) ? functions.dL(
+			A2($elm$time$Time$toSecond, zone, posix)) : ((hours < 1) ? functions.dp(
+			A2($elm$time$Time$toMinute, zone, posix)) : ((hours < 24) ? functions.de(
+			A2($elm$time$Time$toHour, zone, posix)) : ((days < 30) ? functions.c3(days) : ((days < 365) ? functions.dr((days / 30) | 0) : functions.d6((days / 365) | 0)))));
 	});
 var $ryannhg$date_format$DateFormat$Relative$toMilliseconds = $elm$time$Time$posixToMillis;
 var $elm$time$Time$utc = A2($elm$time$Time$Zone, 0, _List_Nil);
@@ -9209,6 +9219,7 @@ var $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions = F3(
 			(differenceInMilliseconds < 0) ? A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.cO, options.cM, options.cL, options.cK, options.cN, options.cP) : A6($ryannhg$date_format$DateFormat$Relative$RelativeTimeFunctions, options.cu, options.cs, options.cr, options.cq, options.ct, options.cv));
 	});
 var $ryannhg$date_format$DateFormat$Relative$relativeTime = $ryannhg$date_format$DateFormat$Relative$relativeTimeWithOptions($ryannhg$date_format$DateFormat$Relative$defaultRelativeOptions);
+var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$row = $elm$html$Html$Attributes$class('flex-row');
 var $rundis$elm_bootstrap$Bootstrap$Spinner$Size = function (a) {
 	return {$: 1, a: a};
 };
@@ -9222,12 +9233,12 @@ var $rundis$elm_bootstrap$Bootstrap$Spinner$applyModifier = F2(
 				var spinnerKind = modifier.a;
 				return _Utils_update(
 					options,
-					{aB: spinnerKind});
+					{aC: spinnerKind});
 			case 1:
 				var spinnerSize = modifier.a;
 				return _Utils_update(
 					options,
-					{dN: spinnerSize});
+					{dO: spinnerSize});
 			case 2:
 				var color_ = modifier.a;
 				return _Utils_update(
@@ -9244,7 +9255,7 @@ var $rundis$elm_bootstrap$Bootstrap$Spinner$applyModifier = F2(
 	});
 var $rundis$elm_bootstrap$Bootstrap$Spinner$Border = 0;
 var $rundis$elm_bootstrap$Bootstrap$Spinner$Normal = 0;
-var $rundis$elm_bootstrap$Bootstrap$Spinner$defaultOptions = {a4: _List_Nil, bd: $elm$core$Maybe$Nothing, aB: 0, dN: 0};
+var $rundis$elm_bootstrap$Bootstrap$Spinner$defaultOptions = {a4: _List_Nil, bd: $elm$core$Maybe$Nothing, aC: 0, dO: 0};
 var $rundis$elm_bootstrap$Bootstrap$Spinner$kindClassName = function (kind_) {
 	if (!kind_) {
 		return 'spinner-border';
@@ -9292,14 +9303,14 @@ var $rundis$elm_bootstrap$Bootstrap$Spinner$toAttributes = function (options) {
 			_List_fromArray(
 				[
 					$elm$core$Maybe$Just(
-					$rundis$elm_bootstrap$Bootstrap$Spinner$kindClass(options.aB)),
+					$rundis$elm_bootstrap$Bootstrap$Spinner$kindClass(options.aC)),
 					A2($elm$core$Maybe$map, $rundis$elm_bootstrap$Bootstrap$Internal$Text$textColorClass, options.bd)
 				])),
 		_Utils_ap(
 			A2(
 				$elm$core$Maybe$withDefault,
 				_List_Nil,
-				A2($rundis$elm_bootstrap$Bootstrap$Spinner$sizeAttributes, options.dN, options.aB)),
+				A2($rundis$elm_bootstrap$Bootstrap$Spinner$sizeAttributes, options.dO, options.aC)),
 			_Utils_ap(
 				_List_fromArray(
 					[
@@ -9315,6 +9326,12 @@ var $rundis$elm_bootstrap$Bootstrap$Spinner$spinner = F2(
 			$rundis$elm_bootstrap$Bootstrap$Spinner$toAttributes(opts),
 			children);
 	});
+var $elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
 var $elm_community$maybe_extra$Maybe$Extra$unwrap = F3(
 	function (_default, f, m) {
 		if (m.$ === 1) {
@@ -9336,7 +9353,7 @@ var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 				return '';
 		}
 	}();
-	return icon + (' ' + nowPlayingInfo.dS);
+	return icon + (' ' + nowPlayingInfo.dT);
 };
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100 = $elm$html$Html$Attributes$class('w-100');
 var $author$project$Main$viewStation = F2(
@@ -9344,7 +9361,7 @@ var $author$project$Main$viewStation = F2(
 		var effectiveTime = $elm$time$Time$millisToPosix(
 			1000 + $elm$time$Time$posixToMillis(currentTime));
 		var loadedWhenInfo = function () {
-			var _v0 = station.aD;
+			var _v0 = station.aE;
 			if (!_v0.$) {
 				return A2(
 					$rundis$elm_bootstrap$Bootstrap$Spinner$spinner,
@@ -9357,7 +9374,7 @@ var $author$project$Main$viewStation = F2(
 					A2($ryannhg$date_format$DateFormat$Relative$relativeTime, effectiveTime, time));
 			}
 		}();
-		var classes = station.au ? 'radio-station fresh' : 'radio-station';
+		var classes = station.av ? 'radio-station fresh' : 'radio-station';
 		return A2(
 			$rundis$elm_bootstrap$Bootstrap$ListGroup$anchor,
 			_List_fromArray(
@@ -9366,7 +9383,8 @@ var $author$project$Main$viewStation = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$Attributes$href('#'),
-							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$col,
+							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$block,
+							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$row,
 							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$alignItemsStart,
 							$elm$html$Html$Attributes$class(classes)
 						]))
@@ -9374,43 +9392,70 @@ var $author$project$Main$viewStation = F2(
 			_List_fromArray(
 				[
 					A2(
+					$elm$html$Html$img,
+					_List_fromArray(
+						[
+							$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
+							$elm$html$Html$Attributes$src(
+							A2(
+								$elm$core$Maybe$withDefault,
+								'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+								A2(
+									$elm$core$Maybe$andThen,
+									function ($) {
+										return $.c1;
+									},
+									station.ah))),
+							A2($elm$html$Html$Attributes$style, 'width', '50px'),
+							A2($elm$html$Html$Attributes$style, 'height', '50px'),
+							$elm$html$Html$Attributes$alt('')
+						]),
+					_List_Nil),
+					A2(
 					$elm$html$Html$div,
 					_List_fromArray(
-						[$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$block, $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$justifyBetween, $rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100]),
+						[$rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100]),
 					_List_fromArray(
 						[
 							A2(
-							$elm$html$Html$h5,
+							$elm$html$Html$div,
+							_List_fromArray(
+								[$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$block, $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$justifyBetween, $rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100]),
 							_List_fromArray(
 								[
-									$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
-									$elm$html$Html$Attributes$class('station-name')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text(station.dr)
+									A2(
+									$elm$html$Html$h5,
+									_List_fromArray(
+										[
+											$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
+											$elm$html$Html$Attributes$class('station-name')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(station.ds)
+										])),
+									A2(
+									$elm$html$Html$small,
+									_List_fromArray(
+										[
+											$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
+											$elm$html$Html$Attributes$class('ml-auto')
+										]),
+									_List_fromArray(
+										[loadedWhenInfo]))
 								])),
 							A2(
-							$elm$html$Html$small,
+							$elm$html$Html$p,
 							_List_fromArray(
 								[
-									$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
-									$elm$html$Html$Attributes$class('ml-auto')
+									$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1,
+									$elm$html$Html$Attributes$class('now-playing')
 								]),
 							_List_fromArray(
-								[loadedWhenInfo]))
-						])),
-					A2(
-					$elm$html$Html$p,
-					_List_fromArray(
-						[
-							$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1,
-							$elm$html$Html$Attributes$class('now-playing')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text(
-							A3($elm_community$maybe_extra$Maybe$Extra$unwrap, '', $author$project$Main$viewNowPlayingInfo, station.aG))
+								[
+									$elm$html$Html$text(
+									A3($elm_community$maybe_extra$Maybe$Extra$unwrap, '', $author$project$Main$viewNowPlayingInfo, station.ah))
+								]))
 						]))
 				]));
 	});
@@ -9455,8 +9500,8 @@ var $author$project$Main$view = F2(
 	});
 var $author$project$Main$main = $MartinSStewart$elm_audio$Audio$elementWithAudio(
 	{
-		d8: $author$project$Main$audio,
-		d9: {ei: $author$project$Main$audioPortFromJS, eB: $author$project$Main$audioPortToJS},
+		d9: $author$project$Main$audio,
+		ea: {ei: $author$project$Main$audioPortFromJS, eB: $author$project$Main$audioPortToJS},
 		en: $author$project$Main$init,
 		ey: $author$project$Main$subscriptions,
 		eG: $author$project$Main$update,
