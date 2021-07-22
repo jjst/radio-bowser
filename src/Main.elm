@@ -258,21 +258,21 @@ viewStation currentTime station =
           CurrentlyLoading -> Spinner.spinner [ Spinner.small ] []
           LoadedAt time -> text (relativeTime effectiveTime time)
       classes = if station.fresh then "radio-station fresh" else "radio-station"
+      emptyImageData = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+      coverImage = img [ Spacing.m1, src (Maybe.withDefault emptyImageData (Maybe.andThen .coverArtUrl station.nowPlaying)), style "width" "50px", style "height" "50px", alt ""] []
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href "#", Flex.block, Flex.row, Flex.alignItemsStart, class classes ] ]
-      [
-         img [ Spacing.m1, src (Maybe.withDefault "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" (Maybe.andThen .coverArtUrl station.nowPlaying)), style "width" "50px", style "height" "50px", alt ""] []
-        , div [ Size.w100 ]
-          [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
-              [ h5 [ Spacing.m1, class "station-name" ]
-                  [ text station.name
-                  ]
-              , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
-              ]
-          , p [ Spacing.mb1, class "now-playing" ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
-          ]
-
+      [ coverImage
+      , div [ Size.w100, Spacing.ml3 ]
+        [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
+            [ h5 [ Spacing.m1, class "station-name" ]
+                [ text station.name
+                ]
+            , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
+            ]
+        , p [ Spacing.mb1, class "now-playing" ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
+        ]
       ]
 
 viewNowPlayingInfo : NowPlayingInfo -> String
