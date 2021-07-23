@@ -8184,6 +8184,25 @@ var $rundis$elm_bootstrap$Bootstrap$ListGroup$custom = function (items) {
 			]),
 		A2($elm$core$List$map, $rundis$elm_bootstrap$Bootstrap$Internal$ListGroup$renderCustomItem, items));
 };
+var $elm$core$Dict$map = F2(
+	function (func, dict) {
+		if (dict.$ === -2) {
+			return $elm$core$Dict$RBEmpty_elm_builtin;
+		} else {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				color,
+				key,
+				A2(func, key, value),
+				A2($elm$core$Dict$map, func, left),
+				A2($elm$core$Dict$map, func, right));
+		}
+	});
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$Col = 0;
 var $rundis$elm_bootstrap$Bootstrap$Grid$Internal$Width = F2(
 	function (screenSize, columnCount) {
@@ -9085,8 +9104,8 @@ var $elm$html$Html$h5 = _VirtualDom_node('h5');
 var $elm$html$Html$img = _VirtualDom_node('img');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Flex$justifyBetween = $elm$html$Html$Attributes$class('justify-content-between');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1 = $elm$html$Html$Attributes$class('m-1');
-var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1 = $elm$html$Html$Attributes$class('mb-1');
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml3 = $elm$html$Html$Attributes$class('ml-3');
+var $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$my2 = $elm$html$Html$Attributes$class('my-2');
 var $elm_community$maybe_extra$Maybe$Extra$orElse = F2(
 	function (ma, mb) {
 		if (mb.$ === 1) {
@@ -9367,8 +9386,8 @@ var $author$project$Main$viewNowPlayingInfo = function (nowPlayingInfo) {
 	return icon + (' ' + nowPlayingInfo.dU);
 };
 var $rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100 = $elm$html$Html$Attributes$class('w-100');
-var $author$project$Main$viewStation = F2(
-	function (currentTime, station) {
+var $author$project$Main$viewStation = F3(
+	function (currentTime, stationId, station) {
 		var emptyImageData = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 		var imgSource = A2(
 			$elm$core$Maybe$withDefault,
@@ -9404,8 +9423,8 @@ var $author$project$Main$viewStation = F2(
 				[
 					$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
 					$elm$html$Html$Attributes$src(imgSource),
-					A2($elm$html$Html$Attributes$style, 'width', '50px'),
-					A2($elm$html$Html$Attributes$style, 'height', '50px'),
+					A2($elm$html$Html$Attributes$style, 'width', '65px'),
+					A2($elm$html$Html$Attributes$style, 'height', '65px'),
 					$elm$html$Html$Attributes$alt('')
 				]),
 			_List_Nil);
@@ -9417,7 +9436,7 @@ var $author$project$Main$viewStation = F2(
 					$rundis$elm_bootstrap$Bootstrap$ListGroup$attrs(
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$href('#'),
+							$elm$html$Html$Attributes$href('#' + stationId),
 							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$block,
 							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$row,
 							$rundis$elm_bootstrap$Bootstrap$Utilities$Flex$alignItemsStart,
@@ -9430,7 +9449,7 @@ var $author$project$Main$viewStation = F2(
 					A2(
 					$elm$html$Html$div,
 					_List_fromArray(
-						[$rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100, $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml3]),
+						[$rundis$elm_bootstrap$Bootstrap$Utilities$Size$w100, $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml3, $rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$my2]),
 					_List_fromArray(
 						[
 							A2(
@@ -9464,7 +9483,7 @@ var $author$project$Main$viewStation = F2(
 							$elm$html$Html$p,
 							_List_fromArray(
 								[
-									$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mb1,
+									$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
 									$elm$html$Html$Attributes$class('now-playing')
 								]),
 							_List_fromArray(
@@ -9488,10 +9507,11 @@ var $author$project$Main$view = F2(
 				default:
 					var s = stations.a;
 					return $rundis$elm_bootstrap$Bootstrap$ListGroup$custom(
-						A2(
-							$elm$core$List$map,
-							$author$project$Main$viewStation(time),
-							$elm$core$Dict$values(s)));
+						$elm$core$Dict$values(
+							A2(
+								$elm$core$Dict$map,
+								$author$project$Main$viewStation(time),
+								s)));
 			}
 		}();
 		return A2(
