@@ -267,19 +267,19 @@ viewStation currentTime stationId station =
           |> Maybe.andThen .coverArtUrl
           |> orElse station.logoUrl
           |> withDefault emptyImageData
-      coverImageElt = img [ Spacing.m1, src imgSource, style "width" "50px", style "height" "50px", alt ""] []
+      coverImageElt = img [ Spacing.m1, src imgSource, style "width" "65px", style "height" "65px", alt ""] []
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href ("#" ++ stationId), Flex.block, Flex.row, Flex.alignItemsStart, class classes ] ]
       [ coverImageElt
-      , div [ Size.w100, Spacing.ml3 ]
+      , div [ Size.w100, Spacing.ml3, Spacing.my2 ]
         [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
             [ h5 [ Spacing.m1, class "station-name" ]
                 [ text station.name
                 ]
             , small [ Spacing.m1, class "ml-auto" ] [ loadedWhenInfo ]
             ]
-        , p [ Spacing.mb1, class "now-playing" ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
+        , p [ Spacing.m1, class "now-playing" ] [text (Maybe.Extra.unwrap "" viewNowPlayingInfo station.nowPlaying)]
         ]
       ]
 
