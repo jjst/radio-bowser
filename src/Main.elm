@@ -235,8 +235,8 @@ view _ {stations, time} =
             text ""
 
           Success s ->
-            s |> Dict.values
-              |> List.map (viewStation time)
+            s |> Dict.map (viewStation time)
+              |> Dict.values
               |> ListGroup.custom
   in
   Grid.container []
@@ -247,8 +247,8 @@ view _ {stations, time} =
 
       ]
 
-viewStation : Time.Posix -> StationInfo -> ListGroup.CustomItem Msg
-viewStation currentTime station =
+viewStation : Time.Posix -> StationId -> StationInfo -> ListGroup.CustomItem Msg
+viewStation currentTime stationId station =
   let
       -- Pretend we're a tiny bit into the future, just so `relativetime` displays times uniformly.
       effectiveTime =
@@ -270,7 +270,7 @@ viewStation currentTime station =
       coverImageElt = img [ Spacing.m1, src imgSource, style "width" "50px", style "height" "50px", alt ""] []
   in
   ListGroup.anchor
-      [ ListGroup.attrs [ href "#", Flex.block, Flex.row, Flex.alignItemsStart, class classes ] ]
+      [ ListGroup.attrs [ href ("#" ++ stationId), Flex.block, Flex.row, Flex.alignItemsStart, class classes ] ]
       [ coverImageElt
       , div [ Size.w100, Spacing.ml3 ]
         [ div [ Flex.block, Flex.justifyBetween, Size.w100 ]
