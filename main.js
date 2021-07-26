@@ -9418,16 +9418,30 @@ var $author$project$Main$viewStation = F3(
 			}
 		}();
 		var coverImageElt = A2(
-			$elm$html$Html$img,
+			$elm$html$Html$div,
 			_List_fromArray(
 				[
 					$rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$m1,
-					$elm$html$Html$Attributes$src(imgSource),
-					A2($elm$html$Html$Attributes$style, 'width', '65px'),
-					A2($elm$html$Html$Attributes$style, 'height', '65px'),
-					$elm$html$Html$Attributes$alt('')
+					$elm$html$Html$Attributes$class('cover-image')
 				]),
-			_List_Nil);
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$img,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$src(imgSource),
+							$elm$html$Html$Attributes$alt('')
+						]),
+					_List_Nil),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('play-button')
+						]),
+					_List_Nil)
+				]));
 		var classes = station.av ? 'radio-station fresh' : 'radio-station';
 		return A2(
 			$rundis$elm_bootstrap$Bootstrap$ListGroup$anchor,
