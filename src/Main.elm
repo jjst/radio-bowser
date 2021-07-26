@@ -267,7 +267,7 @@ viewStation currentTime stationId station =
           |> Maybe.andThen .coverArtUrl
           |> orElse station.logoUrl
           |> withDefault emptyImageData
-      coverImageElt = img [ Spacing.m1, src imgSource, style "width" "65px", style "height" "65px", alt ""] []
+      coverImageElt = div [ Spacing.m1, class "cover-image"] [ img [ src imgSource, alt "" ] [], div [ class "play-button" ] [] ]
   in
   ListGroup.anchor
       [ ListGroup.attrs [ href ("#" ++ stationId), Flex.block, Flex.row, Flex.alignItemsStart, class classes ] ]
