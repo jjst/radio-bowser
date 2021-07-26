@@ -18,26 +18,3 @@
   animation-duration: 1.8s;
   animation-fill-mode: forwards;
 }
-
-.cover-image {
-  width: 65px;
-  height: 65px;
-  position: relative;
-}
-
-.cover-image > img {
-  width: 65px;
-  height: 65px;
-}
-
-a.radio-station:hover > .cover-image > div.play-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 65px;
-  height: 65px;
-  background-image: url("./img/play.png");
-  background-size: 65px 65px;
-  opacity: 1;
-  z-index: 2;
-}
