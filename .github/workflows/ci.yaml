@@ -15,6 +15,7 @@ jobs:
           ./build.sh
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
+        if: github.ref == 'refs/heads/main'
         with:
           branch: gh-pages
           folder: build
