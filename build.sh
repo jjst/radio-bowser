@@ -3,4 +3,4 @@ mkdir build
 elm make --optimize src/Main.elm --output=build/main.js
 cp index.html build/
 cp style.css build/
-cp assets/* build/
+cp -R assets/* build/
